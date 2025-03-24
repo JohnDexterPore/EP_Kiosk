@@ -39,7 +39,7 @@ function Home() {
         {/* Bottom Section */}
         <div className="h-2/10 w-full flex items-center gap-30">
           <button
-            className="h-full w-full border-e-10 border-y-10 border-white rounded-e-4xl shadow-2xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
+            className="h-full w-full border-e-2 border-y-2 border-gray-200 rounded-e-lg shadow-2xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
             style={{
               backgroundImage: `url(${button_bg})`,
               backgroundPosition: "center",
@@ -50,7 +50,7 @@ function Home() {
             <h1 className="text-5xl text-white font-bold">TAKE OUT</h1>
           </button>
           <button
-            className="h-full w-full border-s-10 border-y-10 border-white rounded-s-4xl shadow-2xl flex flex-col items-center justify-center gap-5 cursor-pointer relative overflow-hidden"
+            className="h-full w-full border-s-2 border-y-2 border-gray-200 rounded-s-lg shadow-2xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
             style={{
               backgroundImage: `url(${button_bg})`,
               backgroundPosition: "center",

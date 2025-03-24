@@ -16,7 +16,6 @@ const config = {
     trustedConnection: false,
     enableArithAbout: true,
     instancename: "SQLEXPRESS",
-
   },
   port: 1433,
 };
@@ -30,7 +29,33 @@ app.get("/dinein", (req, res) => {
     if (err) console.log(err);
     const request = new sql.Request();
     request.query(
-      "SELECT * FROM [CX_EP].[dbo].[categories] WHERE ID IN (3, 4, 5, 10, 11)",
+      `SELECT * FROM [CX_EP].[dbo].[categories] 
+      WHERE name IN ('PIZZA MENU', 'Sides', 'Beverage', 'Group', 'GROUP SLIDER')
+      ORDER BY CASE 
+          WHEN name = 'PIZZA MENU' THEN 1 
+          WHEN name = 'Sides' THEN 2
+          WHEN name = 'Beverage' THEN 3
+          WHEN name = 'Group' THEN 4
+          WHEN name = 'GROUP SLIDER' THEN 5
+          ELSE 6 -- Ensures other values are pushed to the end
+      END;
+      `,
+      (err, result) => {
+        if (err) console.log(err);
+        res.send(result.recordset);
+      }
+    );
+  });
+});
+
+app.get("/category/:categoryId", (req, res) => {
+  const { categoryId } = req.params;
+  sql.connect(config, (err) => {
+    if (err) console.log(err);
+    const request = new sql.Request();
+    request.query(
+      `SELECT * FROM [CX_EP].[dbo].[products]
+       WHERE category_id = ${categoryId} AND status = 1`,
       (err, result) => {
         if (err) console.log(err);
         res.send(result.recordset);
