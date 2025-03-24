@@ -9,7 +9,7 @@ app.use(express.json());
 const config = {
   user: "sa",
   password: "b1@dmin2022",
-  server: "172.16.0.103",
+  server: "172.16.200.215",
   database: "CX_EP",
   options: {
     trustServerCertificate: true,
