@@ -32,14 +32,14 @@ function Dinein() {
 
   const fetchCategoryData = (categoryId) => {
     axios
-      .get(`http://172.16.0.95:8081/category/${categoryId}`)
+      .get(`http://localhost:8081/category/${categoryId}`)
       .then((res) => setCategoryData(res.data))
       .catch((err) => console.error("Error fetching category data:", err));
   };
 
   useEffect(() => {
     axios
-      .get("http://172.16.0.95:8081/dinein")
+      .get("http://localhost:8081/dinein")
       .then((res) => setCategories(res.data))
       .catch((err) => console.log(err));
   }, []);

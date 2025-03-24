@@ -11,7 +11,7 @@ function TakeOut() {
   const [data, setData] = useState([]);
   useEffect(() => {
     axios
-      .get("http://172.16.0.95:8081/takeout")
+      .get("http://localhost:8081/takeout")
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));
   }, []);
