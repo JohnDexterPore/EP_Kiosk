@@ -38,3 +38,17 @@ app.get("/dinein", (req, res) => {
     );
   });
 });
+
+app.get("/takeout", (req, res) => {
+  sql.connect(config, (err) => {
+    if (err) console.log(err);
+    const request = new sql.Request();
+    request.query(
+      "SELECT * FROM [CX_EP].[dbo].[categories] WHERE ID IN (3, 4, 5, 10, 11)",
+      (err, result) => {
+        if (err) console.log(err);
+        res.send(result.recordset);
+      }
+    );
+  });
+});

@@ -7,11 +7,11 @@ import drinks from "./img/drinks.png";
 import groups from "./img/group.png";
 import slider from "./img/slider.png";
 
-function Dinein() {
+function TakeOut() {
   const [data, setData] = useState([]);
   useEffect(() => {
     axios
-      .get("http://172.16.0.95:8081/dinein")
+      .get("http://172.16.0.95:8081/takeout")
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -43,7 +43,7 @@ function Dinein() {
                   imgSrc = slider;
                   break;
                 default:
-                  imgSrc = pizza;
+                  imgSrc = pizza; // Default image if id doesn't match
               }
               return (
                 <div
@@ -67,4 +67,4 @@ function Dinein() {
   );
 }
 
-export default Dinein;
+export default TakeOut;
