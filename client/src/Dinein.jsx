@@ -159,19 +159,23 @@ function Dinein() {
           </div>
           <div className="h-8/10 w-full px-5 gap-5 content-start pb-20">
             <div className="w-full flex gap-3">
-              {uniqueSubCategories.map((subCategory) => (
-                <button
-                  key={subCategory}
-                  onClick={() => handleSubCategoryChange(subCategory)}
-                  className={`w-fit text-xl text-gray-600 font-semibold px-5 py-1 rounded-3xl mb-2 shadow-2xl border border-gray-400 ${
-                    selectedSubCategory === subCategory
-                      ? "bg-gray-500 text-white"
-                      : "bg-white"
-                  }`}
-                >
-                  {subCategory ? subCategory : "OTHERS"}
-                </button>
-              ))}
+              {uniqueSubCategories.every((subCategory) => subCategory === "")
+                ? "" // If all values are null, don't render anything
+                : uniqueSubCategories
+                    .filter((subCategory) => subCategory !== "") // Remove null values
+                    .map((subCategory) => (
+                      <button
+                        key={subCategory}
+                        onClick={() => handleSubCategoryChange(subCategory)}
+                        className={`w-fit text-xl text-gray-600 font-semibold px-5 py-1 rounded-3xl mb-2 shadow-2xl border border-gray-400 ${
+                          selectedSubCategory === subCategory
+                            ? "bg-gray-500 text-white"
+                            : "bg-white"
+                        }`}
+                      >
+                        {subCategory}
+                      </button>
+                    ))}
             </div>
             <div className="h-full w-full overflow-auto grid grid-cols-3 gap-5 content-start pb-20">
               {categoryData.length > 0 ? (
