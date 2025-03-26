@@ -9,15 +9,24 @@ import drinks_img from "./img/drinks.png";
 import groups_img from "./img/group.png";
 import slider_img from "./img/slider.png";
 import outline_logo from "./img/icon.png";
+import Modal from "./Modal"; // Import your Modal component
 
 function Dinein() {
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(4); // Auto-select promo
+  const [selectedCategory, setSelectedCategory] = useState(4); // Auto-select promoonst [categoryData, setCategoryData] = useState([]);
   const [categoryData, setCategoryData] = useState([]); // Store fetched data
   const [greeting, setGreeting] = useState("");
   const [isAnimating, setIsAnimating] = useState(false);
   const [animationPosition, setAnimationPosition] = useState({ x: 0, y: 0 });
+  const [selectedItem, setSelectedItem] = useState(null); // Store selected item
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
   const navigate = useNavigate();
+  const uniqueSubCategories = [
+    ...new Set(categoryData.map((item) => item.sub_category_name)),
+  ];
+  const [selectedSubCategory, setSelectedSubCategory] = useState(
+    uniqueSubCategories[0] || ""
+  );
 
   const handleClick = (path, event) => {
     const rect = event.target.getBoundingClientRect();
@@ -57,14 +66,26 @@ function Dinein() {
   }, []);
 
   useEffect(() => {
-    const fetchCategoryData = (categoryId) => {
-      axios
-        .get(`http://localhost:8081/category/${categoryId}`)
-        .then((res) => setCategoryData(res.data))
-        .catch((err) => console.error("Error fetching category data:", err));
-    };
     fetchCategoryData(selectedCategory);
   }, [selectedCategory]);
+
+  const handleSubCategoryChange = (subCategory) => {
+    setSelectedSubCategory(subCategory);
+  };
+  // Open modal and set selected item
+  const openModal = (item) => {
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  };
+
+  useEffect(() => {
+    if (categoryData.length > 0) {
+      const uniqueSubCategories = [
+        ...new Set(categoryData.map((item) => item.sub_category_name)),
+      ];
+      setSelectedSubCategory(uniqueSubCategories[0] || ""); // Set default sub-category
+    }
+  }, [categoryData]); // Runs when categoryData changes
 
   return (
     <div className="w-full h-screen flex flex-wrap justify-center items-center overflow-hidden relative">
@@ -76,9 +97,7 @@ function Dinein() {
           <div className="h-8/10 w-full px-5 flex flex-col gap-3">
             {categories.map((category) => {
               let imgSrc;
-              switch (
-                category.name.toUpperCase() // Normalize to uppercase
-              ) {
+              switch (category.name.toUpperCase()) {
                 case "PIZZA MENU":
                   imgSrc = pizza_img;
                   category.name = "Pizza";
@@ -105,12 +124,12 @@ function Dinein() {
                   key={category.id}
                   onClick={() => {
                     setSelectedCategory(category.id);
-                    fetchCategoryData(category.id); // Fetch data when clicked
+                    fetchCategoryData(category.id);
                   }}
                   className={`h-1/12 w-full flex justify-left items-center gap-3 border border-gray-200 rounded-lg shadow-lg p-2 
                     ${
                       selectedCategory === category.id
-                        ? "bg-gray-300" // Selected button styling
+                        ? "bg-gray-300"
                         : "bg-white hover:bg-gray-200"
                     }`}
                 >
@@ -138,41 +157,67 @@ function Dinein() {
               </button>
             </div>
           </div>
-          {/* Display fetched category data */}
-          <div className="h-8/10 w-full px-5 overflow-auto grid grid-cols-3 gap-5 content-start pb-20">
-            {categoryData.length > 0 ? (
-              categoryData.map((item, index) => (
-                <motion.button
-                  key={item.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="h-60 w-full rounded-xl border border-gray-200 shadow-xl flex flex-col items-center justify-start"
+          <div className="h-8/10 w-full px-5 gap-5 content-start pb-20">
+            <div className="w-full flex gap-3">
+              {uniqueSubCategories.map((subCategory) => (
+                <button
+                  key={subCategory}
+                  onClick={() => handleSubCategoryChange(subCategory)}
+                  className={`w-fit text-xl text-gray-600 font-semibold px-5 py-1 rounded-3xl mb-2 shadow-2xl border border-gray-400 ${
+                    selectedSubCategory === subCategory
+                      ? "bg-gray-500 text-white"
+                      : "bg-white"
+                  }`}
                 >
-                  <img
-                    src={
-                      item.image_url
-                        ? `./src/${item.image_url
-                            .replace(/\\/g, "/")
-                            .replace(/\.\w+$/, ".png")}`
-                        : "./src/default.png"
-                    }
-                    alt="Item"
-                    className="object-cover rounded-md"
-                  />
-                  <div className="flex justify-between w-full">
-                    <h1 className="w-3/4 font-semibold text-sm p-3 text-gray-600 text-start">
-                      {item.name}
-                    </h1>
-                    <h1 className="w-1/4 font-semibold text-sm p-3 text-gray-600 text-end">
-                      P{item.retail_price}
-                    </h1>
-                  </div>
-                </motion.button>
-              ))
-            ) : (
-              <p className="col-span-4 text-gray-600">No data available.</p>
-            )}
+                  {subCategory ? subCategory : "OTHERS"}
+                </button>
+              ))}
+            </div>
+            <div className="h-full w-full overflow-auto grid grid-cols-3 gap-5 content-start pb-20">
+              {categoryData.length > 0 ? (
+                categoryData
+                  .filter(
+                    (item) =>
+                      item.sub_category_name === selectedSubCategory ||
+                      (selectedSubCategory === "ALA CARTE" &&
+                        item.sub_category_name === "")
+                  )
+                  .map((item, index) => (
+                    <motion.button
+                      key={item.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      className="h-60 w-full rounded-xl border border-gray-200 shadow-xl flex flex-col items-center justify-start"
+                      onClick={() => openModal(item)}
+                    >
+                      {/* Item Image */}
+                      <img
+                        src={
+                          item.image_url
+                            ? `./src/${item.image_url
+                                .replace(/\\/g, "/")
+                                .replace(/\.\w+$/, ".png")}`
+                            : "./src/default.png"
+                        }
+                        alt="Item"
+                        className="object-cover rounded-md"
+                      />
+                      {/* Item Details */}
+                      <div className="flex justify-between w-full">
+                        <h1 className="w-3/4 font-semibold text-sm p-3 text-gray-600 text-start">
+                          {item.name}
+                        </h1>
+                        <h1 className="w-1/4 font-semibold text-sm p-3 text-gray-600 text-end">
+                          P{item.retail_price}
+                        </h1>
+                      </div>
+                    </motion.button>
+                  ))
+              ) : (
+                <p className="col-span-4 text-gray-600">No data available.</p>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -201,6 +246,11 @@ function Dinein() {
           className="absolute top-0 left-0 w-full h-full bg-[#54c5d5] z-50 rounded-full"
         ></motion.div>
       )}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        item={selectedItem}
+      />
     </div>
   );
 }
