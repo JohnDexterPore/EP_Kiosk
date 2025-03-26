@@ -8,6 +8,7 @@ import sides_img from "./img/sides.png";
 import drinks_img from "./img/drinks.png";
 import groups_img from "./img/group.png";
 import slider_img from "./img/slider.png";
+import outline_logo from "./img/icon.png";
 
 function Dinein() {
   const [categories, setCategories] = useState([]);
@@ -45,17 +46,23 @@ function Dinein() {
   }, []);
 
   useEffect(() => {
-    const now = new Date();
-    const hours = now.getHours();
-    setGreeting(
-      hours < 12
-        ? "Good Morning."
-        : hours < 18
-        ? "Good Afternoon."
-        : "Good Evening."
-    );
+    const messages = [
+      "Welcome! Please select your order.",
+      "Delicious Choices Await! Start Your Order Below.",
+      "Order Here for a Tasty Experience!",
+      "Hungry? Let’s Get Your Order Started!",
+    ];
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    setGreeting(randomMessage);
+  }, []);
 
-    // Fetch data for the initially selected category
+  useEffect(() => {
+    const fetchCategoryData = (categoryId) => {
+      axios
+        .get(`http://localhost:8081/category/${categoryId}`)
+        .then((res) => setCategoryData(res.data))
+        .catch((err) => console.error("Error fetching category data:", err));
+    };
     fetchCategoryData(selectedCategory);
   }, [selectedCategory]);
 
@@ -64,7 +71,7 @@ function Dinein() {
       <div className="h-5/6 w-full flex flex-wrap items-center justify-center">
         <div className="h-full w-1/4">
           <div className="h-2/10 w-full flex justify-center items-center">
-            <img className="w-10/12" src={outlined_full_logo} alt="" />
+            <img className="w-12/12" src={outlined_full_logo} alt="" />
           </div>
           <div className="h-8/10 w-full px-5 flex flex-col gap-3">
             {categories.map((category) => {
@@ -117,14 +124,14 @@ function Dinein() {
           </div>
         </div>
         <div className="h-full w-3/4">
-          <div className="h-2/10 w-full flex justify-start items-center ps-20 pe-10 text-5xl font-bold text-gray-600">
-            <div className="w-7/10 h-full flex justify-start items-center">
+          <div className="h-2/10 w-full flex justify-start items-center ps-10">
+            <div className="w-9/12 h-full flex justify-start items-center text-5xl/15 font-bold text-gray-600">
               <h1>{greeting}</h1>
             </div>
-            <div className="w-3/10 h-full flex justify-end items-center">
+            <div className="w-3/12 h-full flex justify-end items-center">
               <button
                 id="home"
-                className="h-1/4 w-1/2 bg-[#54c5d5] rounded-2xl shadow-xl"
+                className="h-1/3 w-1/2 bg-[#54c5d5] rounded-s-2xl shadow-xl text-5xl"
                 onClick={(e) => handleClick("/", e)}
               >
                 <i className="lni lni-home-2" style={{ color: "white" }}></i>
@@ -134,22 +141,21 @@ function Dinein() {
           {/* Display fetched category data */}
           <div className="h-8/10 w-full px-5 overflow-auto grid grid-cols-3 gap-5 content-start pb-20">
             {categoryData.length > 0 ? (
-              categoryData.map((item) => (
-                <button
+              categoryData.map((item, index) => (
+                <motion.button
                   key={item.id}
-                  className="h-60 w-full rounded-md border border-gray-200 shadow-xl flex flex-col items-center justify-star"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  className="h-60 w-full rounded-xl border border-gray-200 shadow-xl flex flex-col items-center justify-start"
                 >
                   <img
                     src={
                       item.image_url
-                        ? `./src/${
-                            item.image_url
-                              .replace(/\\/g, "/") // Fix backslashes
-                              //.replace(/Picture/, "Pictures") // Correct folder name
-                              //.replace(/\.\w+$/, ".jpg") // Convert extension to .png
-                              .replace(/\.\w+$/, ".png") // Convert extension to .png
-                          }`
-                        : "./src/default.png" // Fallback image
+                        ? `./src/${item.image_url
+                            .replace(/\\/g, "/")
+                            .replace(/\.\w+$/, ".png")}`
+                        : "./src/default.png"
                     }
                     alt="Item"
                     className="object-cover rounded-md"
@@ -162,7 +168,7 @@ function Dinein() {
                       P{item.retail_price}
                     </h1>
                   </div>
-                </button>
+                </motion.button>
               ))
             ) : (
               <p className="col-span-4 text-gray-600">No data available.</p>
@@ -170,7 +176,19 @@ function Dinein() {
           </div>
         </div>
       </div>
-      <div className="h-1/6 w-full bg-white border-1 border-gray-200 text-gray-600 rounded-t-2xl shadow-2xl px-5 pt-5"></div>
+      <div className="h-1/6 w-full bg-white border-1 border-gray-200 text-gray-600 rounded-t-2xl shadow-2xl flex justify-center items-center">
+        <div className="w-1/4"></div>
+        <div className="w-3/4 h-full flex items-center">
+          <div className="relative w-1/4"></div>
+          <div className="relative w-1/4">
+            <img className="rounded-xl w-full" src={outline_logo} alt="" />
+            <span className="absolute top-0 right-0 bg-red-500 text-white text-base font-bold px-4 py-2 rounded-full transform translate-x-1/2 -translate-y-1/2">
+              5
+            </span>
+          </div>
+          <div className="relative w-1/4"></div>
+        </div>
+      </div>
       {isAnimating && (
         <motion.div
           initial={{

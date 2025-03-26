@@ -20,6 +20,19 @@ const config = {
   port: 1433,
 };
 
+/*
+const config = {
+  user: "JD\\dexte", // Windows username
+  server: "JD\\MSSQLSERVER01", // New server name
+  options: {
+    trustServerCertificate: true,
+    trustedConnection: true, // Set to true for Windows authentication
+  },
+  database: "CX_EP",
+  port: 1433,
+};
+*/
+
 app.listen(8081, () => {
   console.log("Server is running on port 8081");
 });
