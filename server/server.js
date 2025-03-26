@@ -16,8 +16,6 @@ const config = {
     trustServerCertificate: true,
     trustedConnection: false,
     enableArithAbout: true,
-    //instancename: "SQLEXPRESS",  //local connection
-    instancename: "MSSQLSERVER01",
   },
   port: 1433,
 };
