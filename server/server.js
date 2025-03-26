@@ -8,30 +8,20 @@ app.use(express.json());
 
 const config = {
   user: "sa",
+  server: "172.16.0.95", //local connection
+  //server: "172.16.200.215",
   password: "b1@dmin2022",
-  server: "172.16.200.215",
   database: "CX_EP",
   options: {
     trustServerCertificate: true,
     trustedConnection: false,
     enableArithAbout: true,
-    instancename: "SQLEXPRESS",
+    //instancename: "SQLEXPRESS",  //local connection
+    instancename: "MSSQLSERVER01",
   },
   port: 1433,
 };
 
-/*
-const config = {
-  user: "JD\\dexte", // Windows username
-  server: "JD\\MSSQLSERVER01", // New server name
-  options: {
-    trustServerCertificate: true,
-    trustedConnection: true, // Set to true for Windows authentication
-  },
-  database: "CX_EP",
-  port: 1433,
-};
-*/
 
 app.listen(8081, () => {
   console.log("Server is running on port 8081");
