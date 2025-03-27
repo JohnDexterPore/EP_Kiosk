@@ -11,7 +11,7 @@ const config = {
   server: "172.16.0.115\\SQLExpress", //local connection
   //server: "172.16.200.215",
   password: "ripple",
-  database: "BarterCX_EatpizzaUAT",
+  database: "eatpizzaph",
   options: {
     encrypt: false,
     trustServerCertificate: true,
