@@ -21,12 +21,6 @@ function Dinein() {
   const [selectedItem, setSelectedItem] = useState(null); // Store selected item
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
   const navigate = useNavigate();
-  const uniqueSubCategories = [
-    ...new Set(categoryData.map((item) => item.sub_category_name)),
-  ];
-  const [selectedSubCategory, setSelectedSubCategory] = useState(
-    uniqueSubCategories[0] || ""
-  );
 
   const handleClick = (path, event) => {
     const rect = event.target.getBoundingClientRect();
@@ -69,23 +63,12 @@ function Dinein() {
     fetchCategoryData(selectedCategory);
   }, [selectedCategory]);
 
-  const handleSubCategoryChange = (subCategory) => {
-    setSelectedSubCategory(subCategory);
-  };
   // Open modal and set selected item
   const openModal = (item) => {
     setSelectedItem(item);
     setIsModalOpen(true);
   };
 
-  useEffect(() => {
-    if (categoryData.length > 0) {
-      const uniqueSubCategories = [
-        ...new Set(categoryData.map((item) => item.sub_category_name)),
-      ];
-      setSelectedSubCategory(uniqueSubCategories[0] || ""); // Set default sub-category
-    }
-  }, [categoryData]); // Runs when categoryData changes
 
   return (
     <div className="w-full h-screen flex flex-wrap justify-center items-center overflow-hidden relative">
@@ -150,74 +133,61 @@ function Dinein() {
             <div className="w-3/12 h-full flex justify-end items-center">
               <button
                 id="home"
-                className="h-1/3 w-1/2 bg-[#54c5d5] rounded-s-2xl shadow-xl text-5xl"
+                className="h-1/3 w-1/2 bg-[#54c5d5] rounded-s-2xl shadow-xl flex justify-center items-center"
                 onClick={(e) => handleClick("/", e)}
               >
-                <i className="lni lni-home-2" style={{ color: "white" }}></i>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  transform="rotate(0 0 0)"
+                  className="w-4/7"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M12.45 4.90342C12.1833 4.70342 11.8167 4.70342 11.55 4.90342L5.05 9.77842C4.86115 9.92006 4.75 10.1423 4.75 10.3784V18.4998C4.75 18.9141 5.08579 19.2498 5.5 19.2498H9V16.9998C9 15.343 10.3431 13.9998 12 13.9998C13.6569 13.9998 15 15.343 15 16.9998V19.2498H18.5C18.9142 19.2498 19.25 18.9141 19.25 18.4998V10.3784C19.25 10.1423 19.1389 9.92006 18.95 9.77842L12.45 4.90342ZM10.65 3.70342C11.45 3.10342 12.55 3.10342 13.35 3.70342L19.85 8.57842C20.4166 9.00334 20.75 9.67021 20.75 10.3784V18.4998C20.75 19.7425 19.7426 20.7498 18.5 20.7498H14.25C13.8358 20.7498 13.5 20.4141 13.5 19.9998V16.9998C13.5 16.1714 12.8284 15.4998 12 15.4998C11.1716 15.4998 10.5 16.1714 10.5 16.9998V19.9998C10.5 20.4141 10.1642 20.7498 9.75 20.7498H5.5C4.25736 20.7498 3.25 19.7425 3.25 18.4998V10.3784C3.25 9.67021 3.58344 9.00334 4.15 8.57842L10.65 3.70342Z"
+                    fill="#ffffff"
+                  />
+                </svg>
               </button>
             </div>
           </div>
-          <div className="h-8/10 w-full px-5 gap-5 content-start pb-20">
-            <div className="w-full flex gap-3">
-              {uniqueSubCategories.every((subCategory) => subCategory === "")
-                ? "" // If all values are null, don't render anything
-                : uniqueSubCategories
-                    .filter((subCategory) => subCategory !== "") // Remove null values
-                    .map((subCategory) => (
-                      <button
-                        key={subCategory}
-                        onClick={() => handleSubCategoryChange(subCategory)}
-                        className={`w-fit text-xl text-gray-600 font-semibold px-5 py-1 rounded-3xl mb-2 shadow-2xl border border-gray-400 ${
-                          selectedSubCategory === subCategory
-                            ? "bg-gray-500 text-white"
-                            : "bg-white"
-                        }`}
-                      >
-                        {subCategory}
-                      </button>
-                    ))}
-            </div>
-            <div className="h-full w-full overflow-auto grid grid-cols-3 gap-5 content-start pb-20">
+          <div className="h-8/10 w-full px-5 gap-5 content-start  overflow-auto">
+            <div className="h-full w-full grid grid-cols-3 gap-5 content-start pb-20">
               {categoryData.length > 0 ? (
-                categoryData
-                  .filter(
-                    (item) =>
-                      item.sub_category_name === selectedSubCategory ||
-                      (selectedSubCategory === "ALA CARTE" &&
-                        item.sub_category_name === "")
-                  )
-                  .map((item, index) => (
-                    <motion.button
-                      key={item.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.05 }}
-                      className="h-60 w-full rounded-xl border border-gray-200 shadow-xl flex flex-col items-center justify-start"
-                      onClick={() => openModal(item)}
-                    >
-                      {/* Item Image */}
-                      <img
-                        src={
-                          item.image_url
-                            ? `./src/${item.image_url
-                                .replace(/\\/g, "/")
-                                .replace(/\.\w+$/, ".png")}`
-                            : "./src/default.png"
-                        }
-                        alt="Item"
-                        className="object-cover rounded-md"
-                      />
-                      {/* Item Details */}
-                      <div className="flex justify-between w-full">
-                        <h1 className="w-3/4 font-semibold text-sm p-3 text-gray-600 text-start">
-                          {item.name}
-                        </h1>
-                        <h1 className="w-1/4 font-semibold text-sm p-3 text-gray-600 text-end">
-                          P{item.retail_price}
-                        </h1>
-                      </div>
-                    </motion.button>
-                  ))
+                categoryData.map((item, index) => (
+                  <motion.button
+                    key={item.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className="h-60 w-full rounded-xl border border-gray-200 shadow-xl flex flex-col items-center justify-start"
+                    onClick={() => openModal(item)}
+                  >
+                    {/* Item Image */}
+                    <img
+                      src={
+                        item.image_url
+                          ? `./src/${item.image_url
+                              .replace(/\\/g, "/")
+                              .replace(/\.\w+$/, ".png")}`
+                          : "./src/default.png"
+                      }
+                      alt="Item"
+                      className="object-cover rounded-md"
+                    />
+                    {/* Item Details */}
+                    <div className="flex justify-between w-full">
+                      <h1 className="w-3/4 font-semibold text-sm capitalize p-3 text-gray-600 text-start">
+                        {item.name.toLowerCase()}
+                      </h1>
+                      <h1 className="w-1/4 font-semibold text-sm p-3 text-gray-600 text-end">
+                        P{item.retail_price}
+                      </h1>
+                    </div>
+                  </motion.button>
+                ))
               ) : (
                 <p className="col-span-4 text-gray-600">No data available.</p>
               )}

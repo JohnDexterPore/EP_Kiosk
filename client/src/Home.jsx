@@ -37,31 +37,23 @@ function Home() {
         </div>
 
         {/* Bottom Section */}
-        <div className="h-2/10 w-full flex items-center gap-30">
+        <div className="h-3/10 w-full flex items-start gap-30">
           <button
-            className="h-full w-full border-e-2 border-y-2 border-gray-200 rounded-e-lg shadow-2xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
-            style={{
-              backgroundImage: `url(${button_bg})`,
-              backgroundPosition: "center",
-            }}
+            className="h-8/10 w-full border-e-2 border-y-2 border-[#ec3f44] bg-white/90 rounded-e-3xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
             onClick={(e) => handleClick("/takeout", e)}
           >
-            <img className="w-1/2" src={takeout} alt="" />
-            <h1 className="text-5xl text-white font-bold">TAKE OUT</h1>
+            <h1 className="text-5xl text-gray-800 font-bold mb-4">Take-Out</h1>
+            <img className="w-3/7" src={takeout} alt="" />
           </button>
           <button
-            className="h-full w-full border-s-2 border-y-2 border-gray-200 rounded-s-lg shadow-2xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
-            style={{
-              backgroundImage: `url(${button_bg})`,
-              backgroundPosition: "center",
-            }}
+            className="h-8/10 w-full border-s-2 border-y-2 border-[#54c5d5] bg-white/90 rounded-s-3xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
             onClick={(e) => handleClick("/dinein", e)}
           >
-            <img className="w-1/2" src={dinein} alt="" />
-            <h1 className="text-5xl text-white font-bold">DINE IN</h1>
+            <h1 className="text-5xl text-gray-800 font-bold mb-4">Dine-In</h1>
+            <img className="w-3/7" src={dinein} alt="" />
           </button>
         </div>
-        <div className="h-3/10 w-full p-5 flex justify-end items-end">
+        <div className="h-2/10 w-full p-5 flex justify-end items-end">
           <img className="w-1/6" src={qr} alt="" />
         </div>
       </div>

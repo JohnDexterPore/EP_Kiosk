@@ -8,11 +8,12 @@ app.use(express.json());
 
 const config = {
   user: "sa",
-  server: "172.16.0.95", //local connection
+  server: "172.16.0.115\\SQLExpress", //local connection
   //server: "172.16.200.215",
-  password: "b1@dmin2022",
-  database: "CX_EP",
+  password: "ripple",
+  database: "BarterCX_EatpizzaUAT",
   options: {
+    encrypt: false,
     trustServerCertificate: true,
     trustedConnection: false,
     enableArithAbout: true,
@@ -30,7 +31,7 @@ app.get("/dinein", (req, res) => {
     if (err) console.log(err);
     const request = new sql.Request();
     request.query(
-      `SELECT * FROM [CX_EP].[dbo].[categories] 
+      `SELECT * FROM [dbo].[categories] 
       WHERE name IN ('PIZZA MENU', 'Sides', 'Beverage', 'Group', 'GROUP SLIDER')
       ORDER BY CASE 
           WHEN name = 'PIZZA MENU' THEN 1 
@@ -55,8 +56,8 @@ app.get("/category/:categoryId", (req, res) => {
     if (err) console.log(err);
     const request = new sql.Request();
     request.query(
-      `SELECT * FROM [CX_EP].[dbo].[products]
-       WHERE category_id = ${categoryId} AND status = 1`,
+      `SELECT * FROM [dbo].[products]
+       WHERE category_id = ${categoryId} AND status = 1;`,
       (err, result) => {
         if (err) console.log(err);
         res.send(result.recordset);
@@ -70,7 +71,7 @@ app.get("/TakeOut", (req, res) => {
     if (err) console.log(err);
     const request = new sql.Request();
     request.query(
-      `SELECT * FROM [CX_EP].[dbo].[categories] 
+      `SELECT * FROM [dbo].[categories] 
       WHERE name IN ('PIZZA MENU', 'Sides', 'Beverage', 'Group', 'GROUP SLIDER')
       ORDER BY CASE 
           WHEN name = 'PIZZA MENU' THEN 1 
