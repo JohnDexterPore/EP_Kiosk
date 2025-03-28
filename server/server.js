@@ -1,4 +1,9 @@
 const express = require("express");
+const dotenv = require("dotenv");
+
+dotenv.config({ path: '../.env' }); // Load environment variables from the specified path
+
+
 const sql = require("mssql");
 const cors = require("cors");
 
@@ -7,23 +12,23 @@ app.use(cors());
 app.use(express.json());
 
 const config = {
-  user: "sa",
-  server: "172.16.0.115\\SQLExpress", //local connection
-  //server: "172.16.200.215",
-  password: "ripple",
-  database: "eatpizzaph",
+  user: process.env.DB_USER,
+  server: process.env.DB_SERVER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   options: {
     encrypt: false,
     trustServerCertificate: true,
     trustedConnection: false,
     enableArithAbout: true,
   },
-  port: 1433,
-};
+  port: process.env.DB_PORT, // Use the environment variable directly
+  };
 
 
-app.listen(8081, () => {
-  console.log("Server is running on port 8081");
+app.listen(process.env.SERVER_PORT, () => {
+  console.log(`Server is running on port ${process.env.SERVER_PORT}`);
+
 });
 
 app.get("/dinein", (req, res) => {
