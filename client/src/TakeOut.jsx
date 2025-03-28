@@ -17,6 +17,7 @@ function TakeOut() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [animationPosition, setAnimationPosition] = useState({ x: 0, y: 0 });
   const navigate = useNavigate();
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const handleClick = (path, event) => {
     const rect = event.target.getBoundingClientRect();
@@ -32,14 +33,14 @@ function TakeOut() {
 
   const fetchCategoryData = (categoryId) => {
     axios
-      .get(`http://localhost:8081/category/${categoryId}`)
+      .get(`${apiBaseUrl}/category/${categoryId}`)
       .then((res) => setCategoryData(res.data))
       .catch((err) => console.error("Error fetching category data:", err));
   };
 
   useEffect(() => {
     axios
-      .get("http://localhost:8081/TakeOut")
+      .get(`${apiBaseUrl}/TakeOut`)
       .then((res) => setCategories(res.data))
       .catch((err) => console.log(err));
   }, []);

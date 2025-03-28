@@ -21,7 +21,7 @@ function Dinein() {
   const [selectedItem, setSelectedItem] = useState(null); // Store selected item
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
   const navigate = useNavigate();
-
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
   const handleClick = (path, event) => {
     const rect = event.target.getBoundingClientRect();
     setAnimationPosition({
@@ -36,14 +36,14 @@ function Dinein() {
 
   const fetchCategoryData = (categoryId) => {
     axios
-      .get(`http://localhost:8081/category/${categoryId}`)
+      .get(`${apiBaseUrl}/category/${categoryId}`)
       .then((res) => setCategoryData(res.data))
       .catch((err) => console.error("Error fetching category data:", err));
   };
 
   useEffect(() => {
     axios
-      .get("http://localhost:8081/dinein")
+      .get(`${apiBaseUrl}/dinein`)
       .then((res) => setCategories(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -68,7 +68,6 @@ function Dinein() {
     setSelectedItem(item);
     setIsModalOpen(true);
   };
-
 
   return (
     <div className="w-full h-screen flex flex-wrap justify-center items-center overflow-hidden relative">
