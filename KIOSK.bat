@@ -10,20 +10,20 @@ for /f "tokens=5" %%a in ('netstat -ano ^| find ":8080" ^| find "LISTENING"') do
 echo Existing processes stopped. Starting new instances...
 
 :: Start the server
-cd /d "C:\Users\dexte\OneDrive\Desktop\Bonchon Files\EP_Kiosk\server"
+cd /d "C:\EP_Kiosk\server"
 start cmd /k "npm start"
 
 :: Wait for a few seconds to ensure the server starts
 timeout /t 2 /nobreak >nul
 
 :: Start the client
-cd /d "C:\Users\dexte\OneDrive\Desktop\Bonchon Files\EP_Kiosk\client"
+cd /d "C:\EP_Kiosk\client"
 start cmd /k "npm run dev"
 
 :: Wait before opening the browser
 timeout /t 2 /nobreak >nul
 
 :: Open Chrome in full-screen mode
-start chrome --start-fullscreen http://localhost:8080
+start chrome --start-fullscreen http://localhost/
 
 endlocal
