@@ -11,6 +11,7 @@ echo Existing processes stopped. Starting new instances...
 
 :: Start the server
 cd /d "C:\EP_Kiosk\server"
+start cmd /k "npm install"
 start cmd /k "npm start"
 
 :: Wait for a few seconds to ensure the server starts
@@ -18,6 +19,7 @@ timeout /t 2 /nobreak >nul
 
 :: Start the client
 cd /d "C:\EP_Kiosk\client"
+start cmd /k "install"
 start cmd /k "npm run dev"
 
 :: Wait before opening the browser
