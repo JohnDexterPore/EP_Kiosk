@@ -116,7 +116,7 @@ function Dinein() {
                     }`}
                 >
                   <img className="w-5/12" src={imgSrc} alt="" />
-                  <h1 className="text-lg font-semibold capitalize text-gray-600">
+                  <h1 className="text-lg capitalize text-gray-600 esamanru-medium text-start">
                     {category.name}
                   </h1>
                 </button>
@@ -126,8 +126,8 @@ function Dinein() {
         </div>
         <div className="h-full w-3/4">
           <div className="h-2/10 w-full flex justify-start items-center ps-10">
-            <div className="w-9/12 h-full flex justify-start items-center text-5xl/15 font-bold text-gray-600">
-              <h1>{greeting}</h1>
+            <div className="w-9/12 h-full flex justify-start items-center text-5xl/15 text-[#ef3340]">
+              <h1 className="esamanru-bold">{greeting}</h1>
             </div>
             <div className="w-3/12 h-full flex justify-end items-center">
               <button
@@ -166,22 +166,18 @@ function Dinein() {
                   >
                     {/* Item Image */}
                     <img
-                      src={
-                        item.image_url
-                          ? `./src/${item.image_url
-                              .replace(/\\/g, "/")
-                              .replace(/\.\w+$/, ".png")}`
-                          : "./src/default.png"
-                      }
+                      src={`http://localhost:8081/images/${item.image_url
+                        .replace(/\\/g, "/")
+                        .replace(/\.\w+$/, ".png")}`}
                       alt="Item"
                       className="object-cover rounded-md"
                     />
                     {/* Item Details */}
-                    <div className="flex justify-between w-full">
-                      <h1 className="w-3/4 font-semibold text-sm capitalize p-3 text-gray-600 text-start">
-                        {item.name.toLowerCase()}
+                    <div className="flex justify-between w-full esamanru-medium">
+                      <h1 className="w-3/4 text-sm capitalize p-3 text-gray-600 text-start">
+                        {item.cleaned_name.toLowerCase()}
                       </h1>
-                      <h1 className="w-1/4 font-semibold text-sm p-3 text-gray-600 text-end">
+                      <h1 className="w-1/4 text-sm p-3 text-gray-600 text-end">
                         P{item.retail_price}
                       </h1>
                     </div>
@@ -200,7 +196,7 @@ function Dinein() {
           <div className="relative w-1/4"></div>
           <div className="relative w-1/4">
             <img className="rounded-xl w-full" src={outline_logo} alt="" />
-            <span className="absolute top-0 right-0 bg-red-500 text-white text-base font-bold px-4 py-2 rounded-full transform translate-x-1/2 -translate-y-1/2">
+            <span className="absolute top-0 right-0 bg-red-500 text-white text-base px-4 py-2 rounded-full transform translate-x-1/2 -translate-y-1/2">
               5
             </span>
           </div>

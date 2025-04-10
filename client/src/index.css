@@ -2,26 +2,80 @@
 
 /* Apply Gmarket Bold font */
 body {
-    font-family: 'Gmarket Sans', sans-serif;
+  font-family: "Gmarket Sans", sans-serif;
 }
 
-
 ::-webkit-scrollbar {
-    width: 10px;
+  width: 10px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+  background: #f1f1f1;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 5px;
+  background: #888;
+  border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+  background: #555;
+}
+
+@font-face {
+  font-family: "Esamanru Bold";
+  src: url("./assets/Fonts/esamanru Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Esamanru Light";
+  src: url("./assets/Fonts/esamanru Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Esamanru Medium";
+  src: url("./assets/Fonts/esamanru Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "GmarketSansTTFBold";
+  src: url("./assets/Fonts/GmarketSansTTFBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "GmarketSansTTFLight";
+  src: url("./assets/Fonts/GmarketSansTTFLight.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "GmarketSansTTFMedium";
+  src: url("./assets/Fonts/GmarketSansTTFMedium.ttf") format("truetype");
+}
+
+/* Font Classes */
+.esamanru-bold {
+  font-family: "Esamanru Bold", sans-serif;
+}
+
+.esamanru-light {
+  font-family: "Esamanru Light", sans-serif;
+}
+
+.esamanru-medium {
+  font-family: "Esamanru Medium", sans-serif;
+}
+
+.gmarket-bold {
+  font-family: "GmarketSansTTFBold", sans-serif;
+}
+
+.gmarket-light {
+  font-family: "GmarketSansTTFLight", sans-serif;
+}
+
+.gmarket-medium {
+  font-family: "GmarketSansTTFMedium", sans-serif;
 }

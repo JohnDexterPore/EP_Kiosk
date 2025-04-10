@@ -1,8 +1,8 @@
 const express = require("express");
+const path = require("path");
 const dotenv = require("dotenv");
 
-dotenv.config({ path: '../.env' }); // Load environment variables from the specified path
-
+dotenv.config({ path: "../.env" }); // Load environment variables from the specified path
 
 const sql = require("mssql");
 const cors = require("cors");
@@ -23,12 +23,10 @@ const config = {
     enableArithAbout: true,
   },
   port: process.env.DB_PORT, // Use the environment variable directly
-  };
-
+};
 
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`Server is running on port ${process.env.SERVER_PORT}`);
-
 });
 
 app.get("/dinein", (req, res) => {
@@ -61,8 +59,9 @@ app.get("/category/:categoryId", (req, res) => {
     if (err) console.log(err);
     const request = new sql.Request();
     request.query(
-      `SELECT * FROM [dbo].[products]
-       WHERE category_id = ${categoryId} AND status = 1;`,
+      `SELECT *, REPLACE(name, ' ALA CARTE', '') AS cleaned_name
+       FROM [dbo].[products]
+       WHERE category_id = ${categoryId} AND status = 1 AND sub_category_name != 'meal';`,
       (err, result) => {
         if (err) console.log(err);
         res.send(result.recordset);
@@ -94,3 +93,23 @@ app.get("/TakeOut", (req, res) => {
     );
   });
 });
+
+app.get("/item/:alacarteName", (req, res) => {
+  const { alacarteName } = req.params;
+  const mealName = alacarteName.replace(/ALA CARTE$/, "MEAL");
+  sql.connect(config, (err) => {
+    if (err) console.log(err);
+    const request = new sql.Request();
+    request.query(
+      `SELECT * FROM [dbo].[products] 
+      WHERE name = '${mealName}' AND code LIKE 'EP%';
+      `,
+      (err, result) => {
+        if (err) console.log(err);
+        res.send(result.recordset);
+      }
+    );
+  });
+});
+
+app.use("/images", express.static(path.join("C:\\BarterCX")));

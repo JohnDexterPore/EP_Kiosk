@@ -37,19 +37,23 @@ function Home() {
         </div>
 
         {/* Bottom Section */}
-        <div className="h-3/10 w-full flex items-start gap-30">
+        <div className="h-3/10 w-full flex justify-center items-start gap-30">
           <button
-            className="h-8/10 w-full border-e-2 border-y-2 border-[#ec3f44] bg-white/90 rounded-e-3xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
+            className="h-7/10 w-1/3 bg-white/90 rounded-3xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
             onClick={(e) => handleClick("/takeout", e)}
           >
-            <h1 className="text-5xl text-gray-800 font-bold mb-4">Take-Out</h1>
+            <h1 className="text-5xl text-gray-800 mb-4 esamanru-bold">
+              Take-Out
+            </h1>
             <img className="w-3/7" src={takeout} alt="" />
           </button>
           <button
-            className="h-8/10 w-full border-s-2 border-y-2 border-[#54c5d5] bg-white/90 rounded-s-3xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
+            className="h-7/10 w-1/3 bg-white/90 rounded-3xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
             onClick={(e) => handleClick("/dinein", e)}
           >
-            <h1 className="text-5xl text-gray-800 font-bold mb-4">Dine-In</h1>
+            <h1 className="text-5xl text-gray-800 font-bold mb-4 esamanru-bold">
+              Dine-In
+            </h1>
             <img className="w-3/7" src={dinein} alt="" />
           </button>
         </div>
