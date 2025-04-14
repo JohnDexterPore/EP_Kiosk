@@ -166,7 +166,7 @@ function Dinein() {
                   >
                     {/* Item Image */}
                     <img
-                      src={`http://localhost:8081/images/${item.image_url
+                      src={`${apiBaseUrl}/images/${item.image_url
                         .replace(/\\/g, "/")
                         .replace(/\.\w+$/, ".png")}`}
                       alt="Item"

@@ -22,7 +22,7 @@ const config = {
     trustedConnection: false,
     enableArithAbout: true,
   },
-  port: process.env.DB_PORT, // Use the environment variable directly
+  port: parseInt(process.env.DB_PORT, 10), // Use the environment variable directly
 };
 
 app.listen(process.env.SERVER_PORT, () => {
@@ -62,6 +62,65 @@ app.get("/category/:categoryId", (req, res) => {
       `SELECT *, REPLACE(name, ' ALA CARTE', '') AS cleaned_name
        FROM [dbo].[products]
        WHERE category_id = ${categoryId} AND status = 1 AND sub_category_name != 'meal';`,
+      (err, result) => {
+        if (err) console.log(err);
+        res.send(result.recordset);
+      }
+    );
+  });
+});
+
+app.get("/edrinks", (req, res) => {
+  sql.connect(config, (err) => {
+    if (err) console.log(err);
+    const request = new sql.Request();
+    request.query(
+      `SELECT 
+        mc.id,
+        mc.code,
+        mc.name,
+        mc.short_name,
+        mc.bar_code,
+        mc.category_id,
+        mc.retail_price,
+        -- Use ala carte image if available, otherwise fallback to meal's own
+        ISNULL(ac.image_url, mc.image_url) AS image_url,
+        ISNULL(ac.thumnail_url, mc.thumnail_url) AS thumnail_url,
+        mc.status,
+        mc.ref_code,
+        mc.created_by,
+        mc.created_at,
+        mc.updated_by,
+        mc.updated_at,
+        mc.tax_exempt,
+        mc.disable_discount,
+        mc.price_type,
+        mc.wholesale_price,
+        mc.wholesale_quantity,
+        mc.allow_decimal_quantities,
+        mc.allow_sc_pwd,
+        mc.unit_product_id,
+        mc.unit_id,
+        mc.unit_name,
+        mc.unit_cost,
+        mc.unit_content_quantity,
+        mc.color_id,
+        mc.size_id,
+        mc.product_type,
+        mc.sub_category_name,
+        mc.is_branch_product,
+        mc.valid_from,
+        mc.valid_to,
+        mc.previous_status,
+        mc.alternate_name,
+        mc.allow_athlete_mov,
+        mc.allow_solo_parent
+      FROM [dbo].[products] mc
+      LEFT JOIN [dbo].[products] ac
+        ON mc.name + ' ALA CARTE' = ac.name  -- Add "ALA CARTE" to the name of the meal component for matching
+        AND ac.category_id = 1  -- Ensure that this category ID is for ala carte items
+      WHERE mc.category_id = 2  -- Meal components
+        AND mc.status = 1`,
       (err, result) => {
         if (err) console.log(err);
         res.send(result.recordset);
