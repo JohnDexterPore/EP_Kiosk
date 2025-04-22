@@ -9,9 +9,11 @@ import drinks_img from "./img/drinks.png";
 import groups_img from "./img/group.png";
 import slider_img from "./img/slider.png";
 import outline_logo from "./img/icon.png";
+import takeout_box from "./img/takeout.png";
 import Modal from "./Modal"; // Import your Modal component
 
 function Dinein() {
+  const [orders, setOrders] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(4); // Auto-select promoonst [categoryData, setCategoryData] = useState([]);
   const [categoryData, setCategoryData] = useState([]); // Store fetched data
@@ -191,16 +193,30 @@ function Dinein() {
         </div>
       </div>
       <div className="h-1/6 w-full bg-white border-1 border-gray-200 text-gray-600 rounded-t-2xl shadow-2xl flex justify-center items-center">
-        <div className="w-1/4"></div>
-        <div className="w-3/4 h-full flex items-center">
-          <div className="relative w-1/4"></div>
-          <div className="relative w-1/4">
-            <img className="rounded-xl w-full" src={outline_logo} alt="" />
-            <span className="absolute top-0 right-0 bg-red-500 text-white text-base px-4 py-2 rounded-full transform translate-x-1/2 -translate-y-1/2">
-              5
-            </span>
+        <div className="w-full h-full flex flex-row items-center justify-center">
+          <div className="w-2/4 h-full flex flex-row items-center justify-center gap-10">
+            <div className="relative w-1/5 flex items-center">
+              <img className="rounded-xl w-full" src={outline_logo} alt="" />
+              <span className="absolute top-0 right-0 bg-red-500 text-white text-base px-4 py-2 rounded-full transform translate-x-1/2 -translate-y-1/2">
+                5
+              </span>
+            </div>
+            <div className="flex flex-row gap-5 items-center justify-center text-5xl esamanru-bold">
+              P350
+            </div>
           </div>
-          <div className="relative w-1/4"></div>
+          <div className="w-2/4 h-full flex flex-row items-center gap-5">
+            <div className="h-full w-full flex flex-col items-center justify-center text-xl esamanru-medium">
+              <div className="w-full h-full gap-5 flex flex-col items-center justify-center px-10 py-5">
+                <button className="w-full h-1/3 border border-gray-200 rounded-xl text-white bg-[#54c5d5] shadow-lg">
+                  View My Order
+                </button>
+                <button className="w-full h-1/3 border border-gray-200 rounded-xl shadow-lg">
+                  Start Over
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       {isAnimating && (
