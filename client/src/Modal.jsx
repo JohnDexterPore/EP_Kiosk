@@ -5,7 +5,7 @@ import Meal from "./meal";
 import Group from "./Group";
 import EP_logo from "./img/icon.png";
 
-const Modal = ({ isOpen, onClose, item }) => {
+const Modal = ({ isOpen, onClose, item, orders, setOrders }) => {
   const [mealData, setMealData] = useState([]);
   const [isAlacarte, setIsAlacarte] = useState(0);
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -99,17 +99,32 @@ const Modal = ({ isOpen, onClose, item }) => {
       )}
 
       {/* Only show Group component for item names ending with "GROUP" or "SLIDER" */}
-      {(item.category_id == 13 || item.category_id == 14) && <Group />}
+      {(item.category_id == 13 || item.category_id == 14) && (
+        <Group
+          item={item}
+          onClose={onClose}
+          orders={orders}
+          setOrders={setOrders}
+        />
+      )}
       {/* Show Alacarte when isAlacarte state is true */}
       {console.log("isAlacarte state:", isAlacarte)}
       {(item.category_id == 6 || item.category_id == 1 || isAlacarte == 1) && (
-        <Alacarte item={item} onClose={onClose} setIsAlacarte={setIsAlacarte} />
+        <Alacarte
+          item={item}
+          onClose={onClose}
+          setIsAlacarte={setIsAlacarte}
+          orders={orders}
+          setOrders={setOrders}
+        />
       )}
       {isAlacarte == 2 && (
         <Meal
           item={mealData[0]}
           onClose={onClose}
           setIsAlacarte={setIsAlacarte}
+          orders={orders}
+          setOrders={setOrders}
         />
       )}
     </div>

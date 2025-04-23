@@ -15,6 +15,7 @@ import Modal from "./Modal"; // Import your Modal component
 function Dinein() {
   const [orders, setOrders] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState(4); // Auto-select promoonst [categoryData, setCategoryData] = useState([]);
   const [categoryData, setCategoryData] = useState([]); // Store fetched data
   const [greeting, setGreeting] = useState("");
@@ -70,6 +71,11 @@ function Dinein() {
     setSelectedItem(item);
     setIsModalOpen(true);
   };
+  useEffect(() => {
+    setTotalPrice(orders.reduce((sum, item) => sum + item.retail_price, 0));
+  }, [orders]);
+
+  const order_count = orders.length;
 
   return (
     <div className="w-full h-screen flex flex-wrap justify-center items-center overflow-hidden relative">
@@ -194,24 +200,42 @@ function Dinein() {
       </div>
       <div className="h-1/6 w-full bg-white border-1 border-gray-200 text-gray-600 rounded-t-2xl shadow-2xl flex justify-center items-center">
         <div className="w-full h-full flex flex-row items-center justify-center">
-          <div className="w-2/4 h-full flex flex-row items-center justify-center gap-10">
-            <div className="relative w-1/5 flex items-center">
-              <img className="rounded-xl w-full" src={outline_logo} alt="" />
-              <span className="absolute top-0 right-0 bg-red-500 text-white text-base px-4 py-2 rounded-full transform translate-x-1/2 -translate-y-1/2">
-                5
-              </span>
+          <div className="w-2/4 h-full flex flex-row items-center justify-center">
+            <div className="relative w-2/3 flex items-center justify-center">
+              <div className="relative w-2/4 flex items-center">
+                <img className="rounded-xl w-full" src={outline_logo} alt="" />
+                <span className="absolute top-0 right-0 bg-red-500 text-white text-base px-4 py-2 rounded-full transform translate-x-1/2 -translate-y-1/2">
+                  {order_count}
+                </span>
+              </div>
             </div>
-            <div className="flex flex-row gap-5 items-center justify-center text-5xl esamanru-bold">
-              P350
+            <div className="w-2/4 flex flex-row gap-5 items-center justify-start text-5xl esamanru-bold">
+              P{totalPrice}
             </div>
           </div>
           <div className="w-2/4 h-full flex flex-row items-center gap-5">
             <div className="h-full w-full flex flex-col items-center justify-center text-xl esamanru-medium">
               <div className="w-full h-full gap-5 flex flex-col items-center justify-center px-10 py-5">
-                <button className="w-full h-1/3 border border-gray-200 rounded-xl text-white bg-[#54c5d5] shadow-lg">
+                <button
+                  disabled={orders.length === 0}
+                  className={`w-full h-1/3 border border-gray-200 rounded-xl text-white shadow-lg ${
+                    orders.length === 0
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-[#54c5d5]"
+                  }`}
+                >
                   View My Order
                 </button>
-                <button className="w-full h-1/3 border border-gray-200 rounded-xl shadow-lg">
+
+                <button
+                  onClick={() => setOrders([])}
+                  disabled={orders.length === 0}
+                  className={`w-full h-1/3 border border-gray-200 rounded-xl shadow-lg ${
+                    orders.length === 0
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : ""
+                  }`}
+                >
                   Start Over
                 </button>
               </div>
@@ -235,6 +259,8 @@ function Dinein() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         item={selectedItem}
+        orders={orders}
+        setOrders={setOrders}
       />
     </div>
   );

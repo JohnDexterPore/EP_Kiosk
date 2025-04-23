@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function Meal({ item, onClose, setIsAlacarte }) {
+function Meal({ item, onClose, setIsAlacarte, orders, setOrders }) {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
   const [eDrinks, setEDrinks] = useState([]);
   const [orderCount, setOrderCount] = useState(1);

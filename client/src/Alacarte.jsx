@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function Alacarte({ item, onClose, setIsAlacarte }) {
+function Alacarte({ item, onClose, setIsAlacarte, orders, setOrders }) {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
   const [orderCount, setOrderCount] = useState(1);
   const [totalAmount, setTotalAmount] = useState(item.retail_price);
@@ -89,7 +89,15 @@ function Alacarte({ item, onClose, setIsAlacarte }) {
           >
             Cancel
           </button>
-          <button className="text-black text-xl rounded-lg px-4 py-2 w-1/2 h-1/2 esamanru-light shadow-md bg-white/90 border border-gray-200">
+          <button
+            onClick={() => {
+              const duplicatedItems = Array(orderCount).fill(item);
+              setOrders((prevOrders) => [...prevOrders, ...duplicatedItems]);
+              onClose();
+              setIsAlacarte(0);
+            }}
+            className="text-black text-xl rounded-lg px-4 py-2 w-1/2 h-1/2 esamanru-light shadow-md bg-white/90 border border-gray-200"
+          >
             Add to Cart
           </button>
         </div>
