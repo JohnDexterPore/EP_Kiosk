@@ -78,7 +78,7 @@ function Dinein() {
   const order_count = orders.length;
 
   return (
-    <div className="w-full h-screen flex flex-wrap justify-center items-center overflow-hidden relative">
+    <div className="bg-gray-100/60 w-full h-screen flex flex-wrap justify-center items-center overflow-hidden relative">
       <div className="h-5/6 w-full flex flex-wrap items-center justify-center">
         <div className="h-full w-1/4">
           <div className="h-2/10 w-full flex justify-center items-center">
@@ -116,15 +116,15 @@ function Dinein() {
                     setSelectedCategory(category.id);
                     fetchCategoryData(category.id);
                   }}
-                  className={`h-1/12 w-full flex justify-left items-center gap-3 border border-gray-200 rounded-lg shadow-lg p-2 
+                  className={`h-1/7 w-full flex flex-col justify-left items-center gap-3 rounded-lg p-2 
                     ${
                       selectedCategory === category.id
-                        ? "bg-gray-300"
-                        : "bg-white hover:bg-gray-200"
+                        ? "bg-[#54c5d5] text-white"
+                        : "bg-white text-gray-600"
                     }`}
                 >
-                  <img className="w-5/12" src={imgSrc} alt="" />
-                  <h1 className="text-lg capitalize text-gray-600 esamanru-medium text-start">
+                  <img className="w-2/3" src={imgSrc} alt="" />
+                  <h1 className="text-lg capitalize  esamanru-medium text-start">
                     {category.name}
                   </h1>
                 </button>
@@ -169,7 +169,7 @@ function Dinein() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="h-60 w-full rounded-xl border border-gray-200 shadow-xl flex flex-col items-center justify-start"
+                    className="p-3 h-60 w-full rounded-xl bg-white shadow-sm flex flex-col items-center justify-start"
                     onClick={() => openModal(item)}
                   >
                     {/* Item Image */}

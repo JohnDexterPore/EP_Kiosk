@@ -32,10 +32,11 @@ const Modal = ({ isOpen, onClose, item, orders, setOrders }) => {
     <div className="fixed inset-0 bg-white/80 flex justify-center items-center z-50">
       {/* Only show the selection div when item.name ends with "ALA CARTE" */}
       {item.category_id == 4 && !isAlacarte && (
-        <div className="bg-white rounded-2xl p-5 w-2/3 h-3/7 shadow-2xl gap-10 flex flex-col justify-center items-center border-1 border-gray-200">
+        <div className="bg-white rounded-2xl p-10 w-2/3 h-3/7 shadow-2xl gap-10 flex flex-col justify-center items-center border-1 border-gray-200">
           <div className="h-2/8 w-full flex flex-row justify-center items-center">
-            <h1 className="w-full esamanru-bold text-4xl">
-              Would you like to make {item.cleaned_name} a meal?
+            <h1 className="w-full esamanru-bold text-4xl text-gray-800">
+              Would you like to make{" "}
+              <a className="text-[#54c5d5]">{item.cleaned_name}</a> a meal?
             </h1>
           </div>
           <div className="h-5/8 w-full flex flex-row justify-center items-center gap-10 esamanru-medium ">
@@ -54,7 +55,7 @@ const Modal = ({ isOpen, onClose, item, orders, setOrders }) => {
                   />
                 )}
               <div className="flex flex-col justify-between w-full esamanru-medium">
-                <h1 className="w-full text-2xl capitalize text-start">
+                <h1 className="w-full text-2xl capitalize text-start text-[#ef3340]">
                   Yes, Make It a Meal
                 </h1>
                 <h1 className="w-full text-lg text-gray-600 text-start">
@@ -74,7 +75,7 @@ const Modal = ({ isOpen, onClose, item, orders, setOrders }) => {
                 className="object-cover rounded-md"
               />
               <div className="flex flex-col justify-between w-full esamanru-medium">
-                <h1 className="w-full text-2xl capitalize text-start">
+                <h1 className="w-full text-2xl capitalize text-start text-[#ef3340]">
                   No, Item Only
                 </h1>
                 <h1 className="w-full text-lg text-gray-600 text-start">
