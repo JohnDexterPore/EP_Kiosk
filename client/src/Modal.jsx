@@ -3,9 +3,17 @@ import axios from "axios";
 import Alacarte from "./Alacarte";
 import Meal from "./meal";
 import Group from "./Group";
-import EP_logo from "./img/icon.png";
+import Orders from "./Orders";
 
-const Modal = ({ isOpen, onClose, item, orders, setOrders }) => {
+const Modal = ({
+  isOrdering,
+  setIsOrdering,
+  isOpen,
+  onClose,
+  item,
+  orders,
+  setOrders,
+}) => {
   const [mealData, setMealData] = useState([]);
   const [isAlacarte, setIsAlacarte] = useState(0);
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -31,7 +39,7 @@ const Modal = ({ isOpen, onClose, item, orders, setOrders }) => {
   return (
     <div className="fixed inset-0 bg-white/80 flex justify-center items-center z-50">
       {/* Only show the selection div when item.name ends with "ALA CARTE" */}
-      {item.category_id == 4 && !isAlacarte && (
+      {item.category_id == 4 && !isAlacarte && isOrdering == 0 && (
         <div className="bg-white rounded-2xl p-10 w-2/3 h-3/7 shadow-2xl gap-10 flex flex-col justify-center items-center border-1 border-gray-200">
           <div className="h-2/8 w-full flex flex-row justify-center items-center">
             <h1 className="w-full esamanru-bold text-4xl text-gray-800">
@@ -124,6 +132,15 @@ const Modal = ({ isOpen, onClose, item, orders, setOrders }) => {
           item={mealData[0]}
           onClose={onClose}
           setIsAlacarte={setIsAlacarte}
+          orders={orders}
+          setOrders={setOrders}
+        />
+      )}
+      {isOrdering == 1 && (
+        <Orders
+          isOrdering={isOrdering}
+          setIsOrdering={setIsOrdering}
+          onClose={onClose}
           orders={orders}
           setOrders={setOrders}
         />

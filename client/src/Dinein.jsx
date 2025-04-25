@@ -13,6 +13,7 @@ import takeout_box from "./img/takeout.png";
 import Modal from "./Modal"; // Import your Modal component
 
 function Dinein() {
+  const [isOrdering, setIsOrdering] = useState(0);
   const [orders, setOrders] = useState([]);
   const [categories, setCategories] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -170,7 +171,10 @@ function Dinein() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     className="p-3 h-60 w-full rounded-xl bg-white shadow-sm flex flex-col items-center justify-start"
-                    onClick={() => openModal(item)}
+                    onClick={() => {
+                      openModal(item);
+                      isOrdering === 0;
+                    }}
                   >
                     {/* Item Image */}
                     <img
@@ -201,12 +205,14 @@ function Dinein() {
       <div className="h-1/6 w-full bg-white border-1 border-gray-200 text-gray-600 rounded-t-2xl shadow-2xl flex justify-center items-center">
         <div className="w-full h-full flex flex-row items-center justify-center">
           <div className="w-2/4 h-full flex flex-row items-center justify-center">
-            <div className="relative w-2/3 flex items-center justify-center">
+            <div className="relative w-2/4 flex items-center justify-center">
               <div className="relative w-2/4 flex items-center">
                 <img className="rounded-xl w-full" src={outline_logo} alt="" />
-                <span className="absolute top-0 right-0 bg-red-500 text-white text-base px-4 py-2 rounded-full transform translate-x-1/2 -translate-y-1/2">
-                  {order_count}
-                </span>
+                {orders.length > 0 && (
+                  <span className="absolute top-0 right-0 bg-red-500 text-white text-base px-4 py-2 rounded-full transform translate-x-1/2 -translate-y-1/2">
+                    {order_count}
+                  </span>
+                )}
               </div>
             </div>
             <div className="w-2/4 flex flex-row gap-5 items-center justify-start text-5xl esamanru-bold">
@@ -217,6 +223,10 @@ function Dinein() {
             <div className="h-full w-full flex flex-col items-center justify-center text-xl esamanru-medium">
               <div className="w-full h-full gap-5 flex flex-col items-center justify-center px-10 py-5">
                 <button
+                  onClick={() => {
+                    setIsOrdering(1);
+                    setIsModalOpen(true);
+                  }}
                   disabled={orders.length === 0}
                   className={`w-full h-1/3 border border-gray-200 rounded-xl text-white shadow-lg ${
                     orders.length === 0
@@ -230,7 +240,7 @@ function Dinein() {
                 <button
                   onClick={() => setOrders([])}
                   disabled={orders.length === 0}
-                  className={`w-full h-1/3 border border-gray-200 rounded-xl shadow-lg ${
+                  className={`w-full h-1/3 border border-gray-300 rounded-xl shadow-lg ${
                     orders.length === 0
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                       : ""
@@ -256,6 +266,8 @@ function Dinein() {
         ></motion.div>
       )}
       <Modal
+        isOrdering={isOrdering}
+        setIsOrdering={setIsOrdering}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         item={selectedItem}
