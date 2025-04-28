@@ -78,6 +78,10 @@ function Dinein() {
 
   const order_count = orders.length;
 
+  useEffect(() => {
+      console.log("Updated Orders:", orders);
+    }, [orders]);
+
   return (
     <div className="bg-gray-100/60 w-full h-screen flex flex-wrap justify-center items-center overflow-hidden relative">
       <div className="h-5/6 w-full flex flex-wrap items-center justify-center">
@@ -208,9 +212,10 @@ function Dinein() {
             <div className="relative w-2/4 flex items-center justify-center">
               <div className="relative w-2/4 flex items-center">
                 <img className="rounded-xl w-full" src={outline_logo} alt="" />
-                {orders.length > 0 && (
+                {orders.filter((order) => order.category_id === 2).length >
+                  0 && (
                   <span className="absolute top-0 right-0 bg-red-500 text-white text-base px-4 py-2 rounded-full transform translate-x-1/2 -translate-y-1/2">
-                    {order_count}
+                    {orders.filter((order) => order.category_id === 2).length}
                   </span>
                 )}
               </div>

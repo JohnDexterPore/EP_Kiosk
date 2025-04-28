@@ -25,6 +25,6 @@ start cmd /k "npm install && npm run dev"
 timeout /t 2 /nobreak >nul
 
 :: Open browser in full-screen mode
-start chrome --kiosk http://localhost/
+start chrome --kiosk --kiosk-printing http://localhost/
 
 endlocal

@@ -40,7 +40,7 @@ const Modal = ({
     <div className="fixed inset-0 bg-white/80 flex justify-center items-center z-50">
       {/* Only show the selection div when item.name ends with "ALA CARTE" */}
       {item.category_id == 4 && !isAlacarte && isOrdering == 0 && (
-        <div className="bg-white rounded-2xl p-10 w-2/3 h-3/7 shadow-2xl gap-10 flex flex-col justify-center items-center border-1 border-gray-200">
+        <div className="bg-white rounded-2xl px-10 pt-10 pb-20 w-2/3 h-3/7 shadow-2xl gap-10 flex flex-col justify-center items-center border-1 border-gray-200">
           <div className="h-2/8 w-full flex flex-row justify-center items-center">
             <h1 className="w-full esamanru-bold text-4xl text-gray-800">
               Would you like to make{" "}
