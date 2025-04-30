@@ -5,13 +5,36 @@ import Prompt from "./Prompt";
 function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
   const [showPrompt, setShowPrompt] = useState(false);
+  const [buttons, setButtons] = useState("");
+  const [targetItem, setTargetItem] = useState(null);
 
   const handleProceed = () => {
-    console.log("User confirmed!");
-    setIsOrdering(0);
-    setOrders([]);
-    setShowPrompt(false);
-    onClose();
+    if (buttons === "Remove") {
+      setOrders((prevOrders) => {
+        if (targetItem?.item_number != null) {
+          const targetName = targetItem.name;
+          const itemNumbersToRemove = prevOrders
+            .filter((o) => o.name === targetName)
+            .map((o) => o.item_number);
+
+          return prevOrders.filter(
+            (order) =>
+              order.name !== targetName &&
+              !itemNumbersToRemove.includes(order.parent_number)
+          );
+        } else {
+          const refCode = targetItem.code;
+          return prevOrders.filter((order) => order.code !== refCode);
+        }
+      });
+      setTargetItem(null); // reset after action
+      setShowPrompt(false);
+    } else {
+      setIsOrdering(0);
+      setOrders([]);
+      setShowPrompt(false);
+      onClose();
+    }
   };
 
   const handleCancel = () => {
@@ -81,14 +104,14 @@ function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
   }, [orders]);
 
   const renderQuantityControls = (item, count) => (
-    <div className="w-full h-1/3 flex justify-center items-center esamanru-bold">
+    <div className="w-full h-full flex justify-center items-center esamanru-bold">
       <button
         onClick={() => handleDecrement(item)}
-        className="bg-[#ef3340] w-2/12 h-1/2 flex justify-center items-center rounded-lg text-white shadow-md"
+        className="bg-[#ef3340] w-3/12 h-1/2 flex justify-center items-center rounded-lg text-white shadow-md"
       >
         -
       </button>
-      <div className="w-8/12 h-3/5 text-center flex justify-center items-center text-xl esamanru-bold">
+      <div className="w-6/12 h-3/5 text-center flex justify-center items-center text-xl esamanru-bold">
         <input
           className="border border-gray-200 w-5/6 h-5/6 rounded-2xl text-center"
           type="number"
@@ -98,7 +121,7 @@ function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
       </div>
       <button
         onClick={() => handleIncrement(item)}
-        className="bg-[#54c5d5] w-2/12 h-4/9 flex justify-center items-center rounded-lg text-white shadow-md"
+        className="bg-[#54c5d5] w-3/12 h-4/9 flex justify-center items-center rounded-lg text-white shadow-md"
       >
         +
       </button>
@@ -114,27 +137,9 @@ function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
         <button
           className="w-2/12 h-1/2 flex justify-center items-center rounded-xl text-gray-500 shadow-lg border border-gray-200"
           onClick={() => {
-            setOrders((prevOrders) => {
-              if (item.item_number != null) {
-                // Case: item has item_number
-                const targetName = item.name;
-
-                // Get all item_numbers with the same name
-                const itemNumbersToRemove = prevOrders
-                  .filter((o) => o.name === targetName)
-                  .map((o) => o.item_number);
-
-                return prevOrders.filter(
-                  (order) =>
-                    order.name !== targetName &&
-                    !itemNumbersToRemove.includes(order.parent_number)
-                );
-              } else {
-                // Case: item has no item_number, match by code only
-                const refCode = item.code;
-                return prevOrders.filter((order) => order.code !== refCode);
-              }
-            });
+            setButtons("Remove");
+            setTargetItem(item); // <-- store the current item
+            setShowPrompt(true);
           }}
         >
           Remove
@@ -150,8 +155,8 @@ function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
         <div className="w-4/12 flex items-center text-lg esamanru-medium text-wrap">
           <p>{item.name}</p>
         </div>
-        <div className="w-2/12">{renderQuantityControls(item, count)}</div>
-        <div className="w-2/12 text-lg esamanru-medium">
+        <div className="w-3/12 h-2/3">{renderQuantityControls(item, count)}</div>
+        <div className="w-1/12 text-lg esamanru-medium">
           <p>P{item.retail_price * count}</p>
         </div>
       </div>
@@ -242,7 +247,10 @@ function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
           <div className="flex gap-5 h-1/4">
             <button
               className="w-1/3 h-full border border-gray-300 text-gray-400 rounded-xl"
-              onClick={() => setShowPrompt(true)}
+              onClick={() => {
+                setButtons("Start Over");
+                setShowPrompt(true);
+              }}
             >
               Start Over
             </button>
