@@ -28,20 +28,46 @@ function Meal({ item, onClose, setIsAlacarte, orders, setOrders }) {
   const handleDrinkClick = (drink) => {
     setSelectedDrink((prevSelectedDrink) => {
       const newDrink = prevSelectedDrink === drink ? null : drink;
-      console.log("Selected drink:", newDrink);
       return newDrink;
     });
   };
 
   const handleAddToCart = () => {
-    let duplicatedItems = [];
-    duplicatedItems = duplicatedItems.concat(
-      Array(orderCount).fill(selectedDrink)
-    );
-    duplicatedItems = duplicatedItems.concat(Array(orderCount).fill(item));
+    setOrders((prevOrders) => {
+      let duplicatedItems = [];
 
-    // Add duplicated items to existing orders without overwriting
-    setOrders((prevOrders) => [...prevOrders, ...duplicatedItems]);
+      // 1. Find the last item_number used
+      const itemNumbers = prevOrders
+        .filter(
+          (o) => typeof o.item_number === "number" && !isNaN(o.item_number)
+        )
+        .map((o) => o.item_number);
+
+      const lastItemNumber =
+        itemNumbers.length > 0 ? Math.max(...itemNumbers) : 0;
+
+      let currentItemNumber = lastItemNumber + 1;
+
+      // 2. If there is a meal (item), create duplicated meals
+      if (item) {
+        const mealItems = Array.from({ length: orderCount }, () => {
+          const meal = { ...item, item_number: currentItemNumber++ }; // assign unique item_number
+          return meal;
+        });
+        duplicatedItems = duplicatedItems.concat(mealItems);
+      }
+
+      // 3. If there is a drink (selectedDrink), create duplicated drinks
+      if (selectedDrink) {
+        const drinkItems = Array.from({ length: orderCount }, (_, idx) => {
+          const parentNum = lastItemNumber + 1 + idx; // parent_number should match meal's item_number
+          return { ...selectedDrink, parent_number: parentNum };
+        });
+        duplicatedItems = duplicatedItems.concat(drinkItems);
+      }
+
+      return [...prevOrders, ...duplicatedItems];
+    });
 
     // Close the modal and reset any state as needed
     onClose();

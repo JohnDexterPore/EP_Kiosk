@@ -10,13 +10,40 @@ function Alacarte({ item, onClose, setIsAlacarte, orders, setOrders }) {
       setOrderCount(orderCount - 1);
     }
   };
+
   useEffect(() => {
     setTotalAmount(item.retail_price * orderCount);
   }, [orderCount, item.retail_price]);
 
+  // 🔥 Add function to generate unique item_number
+  const generateUniqueItemNumber = () => {
+    const existingNumbers = orders
+      .map((order) => order.item_number)
+      .filter(Boolean);
+    let newItemNumber;
+    do {
+      newItemNumber = Math.floor(Math.random() * 1000000); // You can adjust the range if needed
+    } while (existingNumbers.includes(newItemNumber));
+    return newItemNumber;
+  };
+
+  const handleAddToCart = () => {
+    const duplicatedItems = Array(orderCount)
+      .fill(item)
+      .map((itemCopy) => ({
+        ...itemCopy,
+        item_number: generateUniqueItemNumber(), // Assign a unique item_number
+      }));
+
+    setOrders((prevOrders) => [...prevOrders, ...duplicatedItems]);
+    onClose();
+    setIsAlacarte(0);
+  };
+
   return (
     <>
       <div className="bg-white rounded-2xl p-15 w-2/3 h-3/6 shadow-2xl flex flex-col justify-center items-center border-1 border-gray-200">
+        {/* Your existing content... */}
         <div className="w-full h-9/12 flex flex-col justify-center items-center">
           <img
             src={`${apiBaseUrl}/images/${item.image_url
@@ -26,15 +53,18 @@ function Alacarte({ item, onClose, setIsAlacarte, orders, setOrders }) {
             className="object-cover rounded-md"
           />
         </div>
+
         <div className="w-full h-1/12 flex flex-wrap justify-center items-center esamanru-bold">
           <h2 className="text-xl font-bold w-9/12">{item.name}</h2>
           <p className="w-3/12 text-end">Price: P{totalAmount}</p>
         </div>
+
         <div className="w-full h-2/12 flex justify-center items-center esamanru-bold">
           <button
             onClick={handleDecrement}
             className="bg-[#ef3340] w-2/12 h-4/9 flex justify-center items-center rounded-lg text-white shadow-md"
           >
+            {/* Minus SVG */}
             <svg
               className="w-6"
               viewBox="0 0 24 24"
@@ -47,6 +77,7 @@ function Alacarte({ item, onClose, setIsAlacarte, orders, setOrders }) {
               />
             </svg>
           </button>
+
           <div className="w-8/12 h-3/5 text-center flex justify-center items-center text-xl esamanru-bold">
             <h1 className="border border-gray-200 w-5/6 h-5/6 flex justify-center items-center rounded-2xl">
               <input
@@ -61,16 +92,17 @@ function Alacarte({ item, onClose, setIsAlacarte, orders, setOrders }) {
               />
             </h1>
           </div>
+
           <button
-            onClick={setOrderCount.bind(this, orderCount + 1)}
+            onClick={() => setOrderCount(orderCount + 1)}
             className="bg-[#54c5d5] w-2/12 h-4/9 flex justify-center items-center rounded-lg text-white shadow-md"
           >
+            {/* Plus SVG */}
             <svg
               className="w-6"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              transform="rotate(0 0 0)"
             >
               <path
                 d="M12.0002 4.875C12.6216 4.875 13.1252 5.37868 13.1252 6V10.8752H18.0007C18.622 10.8752 19.1257 11.3789 19.1257 12.0002C19.1257 12.6216 18.622 13.1252 18.0007 13.1252H13.1252V18.0007C13.1252 18.622 12.6216 19.1257 12.0002 19.1257C11.3789 19.1257 10.8752 18.622 10.8752 18.0007V13.1252H6C5.37868 13.1252 4.875 12.6216 4.875 12.0002C4.875 11.3789 5.37868 10.8752 6 10.8752H10.8752V6C10.8752 5.37868 11.3789 4.875 12.0002 4.875Z"
@@ -79,6 +111,7 @@ function Alacarte({ item, onClose, setIsAlacarte, orders, setOrders }) {
             </svg>
           </button>
         </div>
+
         <div className="w-full h-2/12 flex flex-row justify-center items-center gap-10">
           <button
             onClick={() => {
@@ -90,12 +123,7 @@ function Alacarte({ item, onClose, setIsAlacarte, orders, setOrders }) {
             Cancel
           </button>
           <button
-            onClick={() => {
-              const duplicatedItems = Array(orderCount).fill(item);
-              setOrders((prevOrders) => [...prevOrders, ...duplicatedItems]);
-              onClose();
-              setIsAlacarte(0);
-            }}
+            onClick={handleAddToCart}
             className="text-black text-xl rounded-lg px-4 py-2 w-1/2 h-1/2 esamanru-light shadow-md bg-white/90 border border-gray-200"
           >
             Add to Cart

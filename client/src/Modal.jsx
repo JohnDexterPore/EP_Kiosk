@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Alacarte from "./Alacarte";
-import Meal from "./meal";
+import Meal from "./Meal";
 import Group from "./Group";
 import Orders from "./Orders";
 
@@ -31,8 +31,6 @@ const Modal = ({
       fetchItemData(item.name);
     }
   }, [isOpen, item?.name]);
-
-  console.log("Modal item:", mealData);
 
   if (!isOpen || !item) return null;
 
@@ -108,26 +106,28 @@ const Modal = ({
       )}
 
       {/* Only show Group component for item names ending with "GROUP" or "SLIDER" */}
-      {(item.category_id == 13 || item.category_id == 14) && (
-        <Group
-          item={item}
-          onClose={onClose}
-          orders={orders}
-          setOrders={setOrders}
-        />
-      )}
+      {(item.category_id == 13 || item.category_id == 14) &&
+        isOrdering == 0 && (
+          <Group
+            item={item}
+            onClose={onClose}
+            orders={orders}
+            setOrders={setOrders}
+          />
+        )}
       {/* Show Alacarte when isAlacarte state is true */}
-      {console.log("isAlacarte state:", isAlacarte)}
-      {(item.category_id == 6 || item.category_id == 1 || isAlacarte == 1) && (
-        <Alacarte
-          item={item}
-          onClose={onClose}
-          setIsAlacarte={setIsAlacarte}
-          orders={orders}
-          setOrders={setOrders}
-        />
-      )}
-      {isAlacarte == 2 && (
+
+      {(item.category_id == 6 || item.category_id == 1 || isAlacarte == 1) &&
+        isOrdering == 0 && (
+          <Alacarte
+            item={item}
+            onClose={onClose}
+            setIsAlacarte={setIsAlacarte}
+            orders={orders}
+            setOrders={setOrders}
+          />
+        )}
+      {isAlacarte == 2 && isOrdering == 0 && (
         <Meal
           item={mealData[0]}
           onClose={onClose}
