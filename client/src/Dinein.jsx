@@ -209,10 +209,16 @@ function Dinein() {
             <div className="relative w-2/4 flex items-center justify-center">
               <div className="relative w-2/4 flex items-center">
                 <img className="rounded-xl w-full" src={outline_logo} alt="" />
-                {orders.filter((order) => order.category_id !== 2).length >
-                  0 && (
+                {orders.filter(
+                  (order) => order.category_id !== 2 && order.category_id !== 12
+                ).length > 0 && (
                   <span className="absolute top-0 right-0 bg-red-500 text-white text-base px-4 py-2 rounded-full transform translate-x-1/2 -translate-y-1/2">
-                    {orders.filter((order) => order.category_id !== 2).length}
+                    {
+                      orders.filter(
+                        (order) =>
+                          order.category_id !== 2 && order.category_id !== 12
+                      ).length
+                    }
                   </span>
                 )}
               </div>

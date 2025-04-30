@@ -98,6 +98,7 @@ const Modal = ({
               onClick={() => {
                 onClose();
                 setIsAlacarte(0);
+                setMealData([]);
               }}
               className="text-black text-xl rounded-lg px-4 py-2 w-full h-full esamanru-light shadow-md bg-white/90 border border-gray-200"
             >
@@ -135,8 +136,7 @@ const Modal = ({
             orders={orders}
             setOrders={setOrders}
             mealData={mealData}
-          setMealData={setMealData}
-          
+            setMealData={setMealData}
           />
         )}
       {isOrdering == 1 && (

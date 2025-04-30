@@ -199,9 +199,16 @@ function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
                 src={outline_logo}
                 alt="Logo"
               />
-              {orders.filter((order) => order.category_id !== 2).length > 0 && (
-                <span className="absolute top-0 right-0 bg-red-500 text-white text-sm px-2 py-1 rounded-full">
-                  {orders.filter((order) => order.category_id !== 2).length}
+              {orders.filter(
+                (order) => order.category_id !== 2 && order.category_id !== 12
+              ).length > 0 && (
+                <span className="absolute top-0 right-0 bg-red-500 text-white text-base px-4 py-2 rounded-full transform translate-x-1/2 -translate-y-1/2">
+                  {
+                    orders.filter(
+                      (order) =>
+                        order.category_id !== 2 && order.category_id !== 12
+                    ).length
+                  }
                 </span>
               )}
             </div>
