@@ -55,13 +55,18 @@ app.get("/dinein", (req, res) => {
 
 app.get("/category/:categoryId", (req, res) => {
   const { categoryId } = req.params;
+  if (categoryId == 2) {
+    condi_query = `category_id = 1 OR category_id = 2`;
+  } else {
+    condi_query = `category_id = ${categoryId}`;
+  }
   sql.connect(config, (err) => {
     if (err) console.log(err);
     const request = new sql.Request();
     request.query(
       `SELECT *, REPLACE(name, ' ALA CARTE', '') AS cleaned_name
        FROM [dbo].[products]
-       WHERE category_id = ${categoryId} AND status = 1 AND sub_category_name != 'meal';`,
+       WHERE  ${condi_query} AND status = 1 AND sub_category_name != 'meal';`,
       (err, result) => {
         if (err) console.log(err);
         res.send(result.recordset);
@@ -70,7 +75,13 @@ app.get("/category/:categoryId", (req, res) => {
   });
 });
 
-app.get("/edrinks", (req, res) => {
+app.get("/edrinks/:categoryId", (req, res) => {
+  const { categoryId } = req.params;
+  if (categoryId == 13 || categoryId == 14) {
+    condi_query = `category_id = 12`;
+  } else {
+    condi_query = `category_id = 2`;
+  }
   sql.connect(config, (err) => {
     if (err) console.log(err);
     const request = new sql.Request();
@@ -117,9 +128,9 @@ app.get("/edrinks", (req, res) => {
         mc.allow_solo_parent
       FROM [dbo].[products] mc
       LEFT JOIN [dbo].[products] ac
-        ON mc.name + ' ALA CARTE' = ac.name  -- Add "ALA CARTE" to the name of the meal component for matching
+        ON REPLACE(mc.name, ' Meal Component', '') + ' ALA CARTE' = ac.name  -- Add "ALA CARTE" to the name of the meal component for matching
         AND ac.category_id = 1  -- Ensure that this category ID is for ala carte items
-      WHERE mc.category_id = 2  -- Meal components
+      WHERE mc.${condi_query}  -- Meal components
         AND mc.status = 1`,
       (err, result) => {
         if (err) console.log(err);

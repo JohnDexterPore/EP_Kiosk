@@ -173,6 +173,7 @@ function Dinein() {
                     className="p-3 h-60 w-full rounded-xl bg-white shadow-sm flex flex-col items-center justify-start"
                     onClick={() => {
                       openModal(item);
+                      console.log(item);
                       isOrdering === 0;
                     }}
                   >

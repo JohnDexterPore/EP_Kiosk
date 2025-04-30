@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function Meal({ item, onClose, setIsAlacarte, orders, setOrders }) {
+function Meal({
+  item,
+  onClose,
+  setIsAlacarte,
+  orders,
+  setOrders,
+  mealData,
+  setMealData,
+}) {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
   const [eDrinks, setEDrinks] = useState([]);
   const [orderCount, setOrderCount] = useState(1);
@@ -10,7 +18,7 @@ function Meal({ item, onClose, setIsAlacarte, orders, setOrders }) {
 
   useEffect(() => {
     axios
-      .get(`${apiBaseUrl}/edrinks`)
+      .get(`${apiBaseUrl}/edrinks/${item.category_id}`)
       .then((res) => setEDrinks(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -138,7 +146,7 @@ function Meal({ item, onClose, setIsAlacarte, orders, setOrders }) {
             </svg>
           </button>
         </div>
-        <div className="h-4/12 flex flex-wrap justify-center items-center gap-3 w-full overflow-auto">
+        <div className="h-4/12 flex flex-wrap justify-center items-start gap-3 w-full overflow-auto">
           {Array.isArray(eDrinks) && eDrinks.length > 0 ? (
             eDrinks.map((drink) => (
               <button
@@ -187,6 +195,7 @@ function Meal({ item, onClose, setIsAlacarte, orders, setOrders }) {
             onClick={() => {
               onClose();
               setIsAlacarte(0);
+              setMealData([]);
             }}
             className="text-black text-xl rounded-lg px-4 py-2 w-1/2 h-1/2 esamanru-light shadow-md bg-white/90 border border-gray-200"
           >

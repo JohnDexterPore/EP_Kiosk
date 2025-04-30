@@ -161,10 +161,6 @@ function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
     </div>
   );
 
-  useEffect(() => {
-    console.log(orders);
-  }, [orders]);
-
   return (
     <div className="bg-gray-100/60 w-full h-screen flex flex-col overflow-hidden relative">
       {/* Order Display Section */}

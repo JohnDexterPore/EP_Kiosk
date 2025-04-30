@@ -29,6 +29,8 @@ const Modal = ({
   useEffect(() => {
     if (isOpen && item?.name && item?.category_id && item.category_id == 4) {
       fetchItemData(item.name);
+      console.log("Item Data:", item);
+      console.log("Meal Data:", mealData);
     }
   }, [isOpen, item?.name]);
 
@@ -106,18 +108,12 @@ const Modal = ({
       )}
 
       {/* Only show Group component for item names ending with "GROUP" or "SLIDER" */}
-      {(item.category_id == 13 || item.category_id == 14) &&
-        isOrdering == 0 && (
-          <Group
-            item={item}
-            onClose={onClose}
-            orders={orders}
-            setOrders={setOrders}
-          />
-        )}
-      {/* Show Alacarte when isAlacarte state is true */}
 
-      {(item.category_id == 6 || item.category_id == 1 || isAlacarte == 1) &&
+      {((item.category_id === 13 &&
+        item.name.toLowerCase().includes("original")) ||
+        item.category_id == 6 ||
+        item.category_id == 1 ||
+        isAlacarte == 1) &&
         isOrdering == 0 && (
           <Alacarte
             item={item}
@@ -127,15 +123,22 @@ const Modal = ({
             setOrders={setOrders}
           />
         )}
-      {isAlacarte == 2 && isOrdering == 0 && (
-        <Meal
-          item={mealData[0]}
-          onClose={onClose}
-          setIsAlacarte={setIsAlacarte}
-          orders={orders}
-          setOrders={setOrders}
-        />
-      )}
+      {((item.category_id === 13 &&
+        !item.name.toLowerCase().includes("original")) ||
+        item.category_id === 14 ||
+        isAlacarte == 2) &&
+        isOrdering == 0 && (
+          <Meal
+            item={mealData[0] ?? item}
+            onClose={onClose}
+            setIsAlacarte={setIsAlacarte}
+            orders={orders}
+            setOrders={setOrders}
+            mealData={mealData}
+          setMealData={setMealData}
+          
+          />
+        )}
       {isOrdering == 1 && (
         <Orders
           isOrdering={isOrdering}
