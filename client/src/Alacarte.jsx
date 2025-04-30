@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 
-function Alacarte({ item, onClose, setIsAlacarte, orders, setOrders }) {
+function Alacarte({
+  item,
+  onClose,
+  setIsAlacarte,
+  orders,
+  setOrders,
+  mealData,
+  setMealData,
+}) {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
   const [orderCount, setOrderCount] = useState(1);
   const [totalAmount, setTotalAmount] = useState(item.retail_price);
@@ -36,6 +44,7 @@ function Alacarte({ item, onClose, setIsAlacarte, orders, setOrders }) {
       }));
 
     setOrders((prevOrders) => [...prevOrders, ...duplicatedItems]);
+    setMealData([]);
     onClose();
     setIsAlacarte(0);
   };
@@ -115,8 +124,9 @@ function Alacarte({ item, onClose, setIsAlacarte, orders, setOrders }) {
         <div className="w-full h-2/12 flex flex-row justify-center items-center gap-10">
           <button
             onClick={() => {
-              onClose();
+              setMealData([]);
               setIsAlacarte(0);
+              onClose();
             }}
             className="text-black text-xl rounded-lg px-4 py-2 w-1/2 h-1/2 esamanru-light shadow-md bg-white/90 border border-gray-200"
           >

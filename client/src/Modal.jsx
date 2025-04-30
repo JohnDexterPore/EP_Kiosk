@@ -122,6 +122,8 @@ const Modal = ({
             setIsAlacarte={setIsAlacarte}
             orders={orders}
             setOrders={setOrders}
+            mealData={mealData}
+            setMealData={setMealData}
           />
         )}
       {((item.category_id === 13 &&
@@ -146,6 +148,8 @@ const Modal = ({
           onClose={onClose}
           orders={orders}
           setOrders={setOrders}
+          mealData={mealData}
+          setMealData={setMealData}
         />
       )}
     </div>

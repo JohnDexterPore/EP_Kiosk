@@ -2,7 +2,15 @@ import React, { useState, useEffect, useMemo } from "react";
 import outline_logo from "./img/icon.png";
 import Prompt from "./Prompt";
 
-function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
+function Orders({
+  isOrdering,
+  setIsOrdering,
+  onClose,
+  orders,
+  setOrders,
+  mealData,
+  setMealData,
+}) {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
   const [showPrompt, setShowPrompt] = useState(false);
   const [buttons, setButtons] = useState("");
@@ -32,6 +40,7 @@ function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
     } else {
       setIsOrdering(0);
       setOrders([]);
+      setMealData([]);
       setShowPrompt(false);
       onClose();
     }
@@ -155,7 +164,9 @@ function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
         <div className="w-4/12 flex items-center text-lg esamanru-medium text-wrap">
           <p>{item.name}</p>
         </div>
-        <div className="w-3/12 h-2/3">{renderQuantityControls(item, count)}</div>
+        <div className="w-3/12 h-2/3">
+          {renderQuantityControls(item, count)}
+        </div>
         <div className="w-1/12 text-lg esamanru-medium">
           <p>P{item.retail_price * count}</p>
         </div>
@@ -257,6 +268,7 @@ function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
             <button
               className="w-2/3 h-full border border-gray-300 text-gray-400 rounded-xl"
               onClick={() => {
+                setMealData([]);
                 setIsOrdering(0);
                 onClose();
               }}
