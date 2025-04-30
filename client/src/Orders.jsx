@@ -1,8 +1,23 @@
 import React, { useState, useEffect, useMemo } from "react";
 import outline_logo from "./img/icon.png";
+import Prompt from "./Prompt";
 
 function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  const [showPrompt, setShowPrompt] = useState(false);
+
+  const handleProceed = () => {
+    console.log("User confirmed!");
+    setIsOrdering(0);
+    setOrders([]);
+    setShowPrompt(false);
+    onClose();
+  };
+
+  const handleCancel = () => {
+    console.log("User cancelled.");
+    setShowPrompt(false);
+  };
 
   const handleIncrement = (item) => {
     setOrders([...orders, item]);
@@ -227,11 +242,7 @@ function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
           <div className="flex gap-5 h-1/4">
             <button
               className="w-1/3 h-full border border-gray-300 text-gray-400 rounded-xl"
-              onClick={() => {
-                setIsOrdering(0);
-                setOrders([]);
-                onClose();
-              }}
+              onClick={() => setShowPrompt(true)}
             >
               Start Over
             </button>
@@ -247,6 +258,12 @@ function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
           </div>
         </div>
       </div>
+      <Prompt
+        isVisible={showPrompt}
+        onConfirm={handleProceed}
+        onCancel={handleCancel}
+        message="Are you sure you want to continue?"
+      />
     </div>
   );
 }

@@ -10,7 +10,8 @@ import groups_img from "./img/group.png";
 import slider_img from "./img/slider.png";
 import outline_logo from "./img/icon.png";
 import takeout_box from "./img/takeout.png";
-import Modal from "./Modal"; // Import your Modal component
+import Modal from "./Modal";
+import Prompt from "./Prompt";
 
 function Dinein() {
   const [isOrdering, setIsOrdering] = useState(0);
@@ -26,6 +27,19 @@ function Dinein() {
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
   const navigate = useNavigate();
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
+  const [showPrompt, setShowPrompt] = useState(false);
+
+  const handleProceed = () => {
+    console.log("User confirmed!");
+    setOrders([]);
+    setShowPrompt(false);
+  };
+
+  const handleCancel = () => {
+    console.log("User cancelled.");
+    setShowPrompt(false);
+  };
   const handleClick = (path, event) => {
     const rect = event.target.getBoundingClientRect();
     setAnimationPosition({
@@ -246,7 +260,7 @@ function Dinein() {
                 </button>
 
                 <button
-                  onClick={() => setOrders([])}
+                  onClick={() => setShowPrompt(true)}
                   disabled={orders.length === 0}
                   className={`w-full h-1/3 border border-gray-300 rounded-xl shadow-lg ${
                     orders.length === 0
@@ -281,6 +295,12 @@ function Dinein() {
         item={selectedItem}
         orders={orders}
         setOrders={setOrders}
+      />
+      <Prompt
+        isVisible={showPrompt}
+        onConfirm={handleProceed}
+        onCancel={handleCancel}
+        message="Are you sure you want to continue?"
       />
     </div>
   );
