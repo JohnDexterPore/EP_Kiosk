@@ -98,14 +98,33 @@ function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
       <div className="flex flex-row gap-5 items-center justify-start">
         <button
           className="w-2/12 h-1/2 flex justify-center items-center rounded-xl text-gray-500 shadow-lg border border-gray-200"
-          onClick={() =>
-            setOrders(
-              orders.filter((order) => order.item_number !== item.item_number)
-            )
-          }
+          onClick={() => {
+            setOrders((prevOrders) => {
+              if (item.item_number != null) {
+                // Case: item has item_number
+                const targetName = item.name;
+
+                // Get all item_numbers with the same name
+                const itemNumbersToRemove = prevOrders
+                  .filter((o) => o.name === targetName)
+                  .map((o) => o.item_number);
+
+                return prevOrders.filter(
+                  (order) =>
+                    order.name !== targetName &&
+                    !itemNumbersToRemove.includes(order.parent_number)
+                );
+              } else {
+                // Case: item has no item_number, match by code only
+                const refCode = item.code;
+                return prevOrders.filter((order) => order.code !== refCode);
+              }
+            });
+          }}
         >
           Remove
         </button>
+
         <img
           className="rounded-xl w-2/12"
           src={`${apiBaseUrl}/images/${item.image_url
@@ -141,6 +160,10 @@ function Orders({ isOrdering, setIsOrdering, onClose, orders, setOrders }) {
         ))}
     </div>
   );
+
+  useEffect(() => {
+    console.log(orders);
+  }, [orders]);
 
   return (
     <div className="bg-gray-100/60 w-full h-screen flex flex-col overflow-hidden relative">
