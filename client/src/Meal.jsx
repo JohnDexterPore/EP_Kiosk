@@ -80,6 +80,7 @@ function Meal({
     // Close the modal and reset any state as needed
     onClose();
     setIsAlacarte(0);
+    setMealData([]);
   };
 
   return (
