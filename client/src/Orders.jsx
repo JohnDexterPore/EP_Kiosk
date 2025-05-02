@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import outline_logo from "./img/icon.png";
 import Prompt from "./Prompt";
+import Payment from "./Payment";
 
 function Orders({
   isOrdering,
@@ -13,6 +14,7 @@ function Orders({
 }) {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
   const [showPrompt, setShowPrompt] = useState(false);
+  const [showComplete, setShowComplete] = useState(false);
   const [buttons, setButtons] = useState("");
   const [targetItem, setTargetItem] = useState(null);
 
@@ -336,7 +338,9 @@ function Orders({
         <div className="h-5/8 px-20 flex flex-col justify-center gap-4 text-2xl esamanru-medium">
           <button
             className="w-full h-1/3 bg-[#54c5d5] text-white rounded-xl shadow-lg"
-            onClick={() => setIsOrdering(1)}
+            onClick={() => {
+              setShowComplete(true);
+            }}
           >
             Complete Order
           </button>
@@ -369,6 +373,7 @@ function Orders({
         onCancel={handleCancel}
         message="Are you sure you want to continue?"
       />
+      <Payment isComplete={showComplete} orders={orders} />
     </div>
   );
 }
