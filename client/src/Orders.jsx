@@ -18,6 +18,10 @@ function Orders({
   const [buttons, setButtons] = useState("");
   const [targetItem, setTargetItem] = useState(null);
 
+  const handleBack = () => {
+    setShowComplete(false);
+  };
+
   const handleProceed = () => {
     if (buttons === "Remove") {
       setOrders((prevOrders) => {
@@ -49,7 +53,6 @@ function Orders({
   };
 
   const handleCancel = () => {
-    console.log("User cancelled.");
     setShowPrompt(false);
   };
 
@@ -97,8 +100,6 @@ function Orders({
           });
         }
       }
-
-      console.log("New Items: ", newItems);
       return [...prevOrders, ...newItems];
     });
   };
@@ -133,8 +134,6 @@ function Orders({
           updatedOrders.splice(index, 1);
         }
       }
-
-      console.log("New Items: ", newItems);
       return updatedOrders;
     });
   };
@@ -373,7 +372,11 @@ function Orders({
         onCancel={handleCancel}
         message="Are you sure you want to continue?"
       />
-      <Payment isComplete={showComplete} orders={orders} />
+      <Payment
+        showComplete={showComplete}
+        orders={orders}
+        handleBack={handleBack}
+      />
     </div>
   );
 }

@@ -3,8 +3,8 @@ import outline_logo from "./img/icon.png";
 import kiosk from "./img/kiosk.png";
 import counter from "./img/counter.png";
 
-const Payment = ({ isComplete, orders }) => {
-  if (!isComplete) return null;
+const Payment = ({ showComplete, orders, handleBack }) => {
+  if (!showComplete) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 esamanru-light">
@@ -35,7 +35,10 @@ const Payment = ({ isComplete, orders }) => {
           <button className="w-1/2 h-1/2  border border-gray-300 text-gray-400 rounded-md">
             Start Over
           </button>
-          <button className="w-1/2 h-1/2  border border-gray-300 text-gray-400 rounded-md">
+          <button
+            className="w-1/2 h-1/2  border border-gray-300 text-gray-400 rounded-md"
+            onClick={handleBack}
+          >
             Back
           </button>
         </div>
