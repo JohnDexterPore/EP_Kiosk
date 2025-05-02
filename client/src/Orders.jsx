@@ -52,19 +52,89 @@ function Orders({
   };
 
   const handleIncrement = (item) => {
-    setOrders([...orders, item]);
+    setOrders((prevOrders) => {
+      // 1. Get the last item_number used
+      const itemNumbers = prevOrders
+        .filter(
+          (o) => typeof o.item_number === "number" && !isNaN(o.item_number)
+        )
+        .map((o) => o.item_number);
+      const lastItemNumber =
+        itemNumbers.length > 0 ? Math.max(...itemNumbers) : 0;
+      const newItemNumber = lastItemNumber + 1;
+
+      const isMeal = item.item_number != null;
+      const hasEight = item.name?.includes("8");
+      const isSpecialCategory =
+        item.category_id === 13 || item.category_id === 14;
+
+      let newItems = [];
+
+      // 2. Add new meal (with unique item_number)
+      const newMeal = { ...item, item_number: newItemNumber };
+      newItems.push(newMeal);
+
+      // 3. Add associated drinks
+      if (isMeal) {
+        const associatedDrinks = prevOrders.filter(
+          (order) => order.parent_number === item.item_number
+        );
+
+        if (isSpecialCategory && hasEight) {
+          // Add only 2 total drinks (first 2 found)
+          for (let i = 0; i < 2 && i < associatedDrinks.length; i++) {
+            newItems.push({
+              ...associatedDrinks[i],
+              parent_number: newItemNumber,
+            });
+          }
+        } else {
+          // Add same drinks as original
+          associatedDrinks.forEach((drink) => {
+            newItems.push({ ...drink, parent_number: newItemNumber });
+          });
+        }
+      }
+
+      console.log("New Items: ", newItems);
+      return [...prevOrders, ...newItems];
+    });
   };
 
   const handleDecrement = (item) => {
-    const index = orders.findIndex(
-      (order) =>
-        order.name === item.name && order.retail_price === item.retail_price
-    );
-    if (index !== -1) {
-      const updatedOrders = [...orders];
-      updatedOrders.splice(index, 1);
-      setOrders(updatedOrders);
-    }
+    setOrders((prevOrders) => {
+      const updatedOrders = [...prevOrders];
+
+      if (item.item_number) {
+        // It's a meal — remove one group (meal + drinks)
+        const mealIndex = updatedOrders.findIndex(
+          (order) => order.item_number === item.item_number
+        );
+
+        if (mealIndex !== -1) {
+          // 1. Remove the meal
+          updatedOrders.splice(mealIndex, 1);
+
+          // 2. Remove associated drinks
+          const remaining = updatedOrders.filter(
+            (order) => order.parent_number !== item.item_number
+          );
+          return remaining;
+        }
+      } else if (!item.item_number && !item.parent_number) {
+        // It's a standalone item
+        const index = updatedOrders.findIndex(
+          (order) =>
+            order.name === item.name && order.retail_price === item.retail_price
+        );
+        if (index !== -1) {
+          updatedOrders.splice(index, 1);
+        }
+      }
+
+      console.log("New Items: ", newItems);
+      return updatedOrders;
+    });
   };
 
   const totalPrice = useMemo(
@@ -174,21 +244,36 @@ function Orders({
 
       {/* Render associated drinks for meals */}
       {isMeal &&
-        drinks.map((drink, dIndex) => (
-          <div
-            key={`${item.item_number}-drink-${dIndex}`}
-            className="flex flex-row w-full gap-5 items-center justify-start  text-md esamanru-light"
-          >
-            <div className="w-4/12 me-8"></div>
-            <div className="w-4/12">
-              <p>--{drink.name}</p>
+        (() => {
+          // Group drinks by name
+          const drinkMap = new Map();
+          drinks.forEach((drink) => {
+            if (drinkMap.has(drink.name)) {
+              drinkMap.get(drink.name).count += 1;
+            } else {
+              drinkMap.set(drink.name, { ...drink, count: 1 });
+            }
+          });
+
+          // Render grouped drinks
+          return Array.from(drinkMap.values()).map((drink, index) => (
+            <div
+              key={`${item.item_number}-drink-${index}`}
+              className="flex flex-row w-full gap-5 items-center justify-start text-md esamanru-light"
+            >
+              <div className="w-4/12 me-8"></div>
+              <div className="w-4/12">
+                <p>
+                  --{drink.name} x {drink.count * count}
+                </p>
+              </div>
+              <div className="w-2/12"></div>
+              <div className="w-2/12">
+                <p>P{drink.retail_price * drink.count * count}</p>
+              </div>
             </div>
-            <div className="w-2/12"></div>
-            <div className="w-2/12">
-              <p>P{drink.retail_price * count}</p>
-            </div>
-          </div>
-        ))}
+          ));
+        })()}
     </div>
   );
 

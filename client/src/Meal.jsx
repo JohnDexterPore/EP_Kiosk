@@ -56,22 +56,33 @@ function Meal({
 
       let currentItemNumber = lastItemNumber + 1;
 
-      // 2. If there is a meal (item), create duplicated meals
+      // 2. Duplicate meals
+      let mealItemNumbers = [];
       if (item) {
         const mealItems = Array.from({ length: orderCount }, () => {
-          const meal = { ...item, item_number: currentItemNumber++ }; // assign unique item_number
+          const meal = { ...item, item_number: currentItemNumber++ };
+          mealItemNumbers.push(meal.item_number);
           return meal;
         });
         duplicatedItems = duplicatedItems.concat(mealItems);
       }
 
-      // 3. If there is a drink (selectedDrink), create duplicated drinks
+      // 3. Duplicate drinks (if any)
       if (selectedDrink) {
-        const drinkItems = Array.from({ length: orderCount }, (_, idx) => {
-          const parentNum = lastItemNumber + 1 + idx; // parent_number should match meal's item_number
-          return { ...selectedDrink, parent_number: parentNum };
+        mealItemNumbers.forEach((mealItemNumber) => {
+          // Check if item name includes "8" and category_id is 13 or 14
+          const hasEight = item.name?.includes("8");
+          const isSpecialCategory =
+            item.category_id === 13 || item.category_id === 14;
+          const drinkMultiplier = hasEight && isSpecialCategory ? 2 : 1;
+
+          for (let i = 0; i < drinkMultiplier; i++) {
+            duplicatedItems.push({
+              ...selectedDrink,
+              parent_number: mealItemNumber,
+            });
+          }
         });
-        duplicatedItems = duplicatedItems.concat(drinkItems);
       }
 
       return [...prevOrders, ...duplicatedItems];
