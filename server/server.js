@@ -183,3 +183,18 @@ app.get("/item/:alacarteName", (req, res) => {
 });
 
 app.use("/images", express.static(path.join("C:\\BarterCX")));
+
+app.get("/dinein/orderNumber", (req, res) => {
+  sql.connect(config, (err) => {
+    if (err) console.log(err);
+    const request = new sql.Request();
+    request.query(
+      `
+      `,
+      (err, result) => {
+        if (err) console.log(err);
+        res.send(result.recordset);
+      }
+    );
+  });
+});

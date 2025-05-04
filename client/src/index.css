@@ -85,3 +85,12 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+@media print {
+  body * {
+    visibility: hidden; /* Hide everything */
+  }
+  .receipt-container, .receipt-container * {
+    visibility: visible; /* Only show receipt */
+  }
+}
