@@ -86,11 +86,53 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 @media print {
-  body * {
-    visibility: hidden; /* Hide everything */
+  .receipt-container .text-6xl,
+  .receipt-container .text-8xl {
+    font-size: 24pt !important;
   }
-  .receipt-container, .receipt-container * {
-    visibility: visible; /* Only show receipt */
+
+  .esamanru-bold {
+    font-weight: bold;
+  }
+
+  .esamanru-medium {
+    font-weight: 500;
+  }
+  body * {
+    visibility: hidden !important;
+  }
+
+  .receipt-container,
+  .receipt-container * {
+    visibility: visible !important;
+  }
+
+  .receipt-container {
+    border: none !important;
+    position: absolute;
+    top: -145px;
+    left: 50%;
+    bottom: 50px;
+    transform: translateX(-50%);
+    font-size: 14pt;
+    background: white;
+    box-sizing: border-box;
+    gap: 20px !important; /* For flexbox/grid */
+  }
+
+  @page {
+    size: 58mm auto; /* for thermal printers */
+    margin: 0;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
   }
 }

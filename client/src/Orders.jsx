@@ -372,11 +372,7 @@ function Orders({
         onCancel={handleCancel}
         message="Are you sure you want to continue?"
       />
-      <Payment
-        showComplete={showComplete}
-        orders={orders}
-        handleBack={handleBack}
-      />
+      <Payment showComplete={showComplete} orders={orders} />
     </div>
   );
 }

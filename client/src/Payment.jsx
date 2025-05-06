@@ -3,29 +3,18 @@ import outline_logo from "./img/icon.png";
 import kiosk from "./img/kiosk.png";
 import counter from "./img/counter.png";
 
-const Payment = ({ showComplete }) => {
+const Payment = ({ showComplete, orders }) => {
   const [orderNumber, setOrderNumber] = useState(null);
   const [countdown, setCountdown] = useState(5); // Start at 5 seconds
 
   useEffect(() => {
     if (orderNumber) {
-      const frame = requestAnimationFrame(() => {
-        setTimeout(() => {
-          window.print();
-        }, 100); // Add a short delay to ensure DOM is painted
-      });
-
       const timer = setInterval(() => {
         setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
       }, 1000);
 
-      //const redirectTimer = setTimeout(() => {
-      //  window.location.href = "/"; // Redirect when countdown reaches 0
-      // }, 5000);
-
       return () => {
-        clearInterval(timer); // Stop countdown updates
-        //  clearTimeout(redirectTimer); // Prevent unnecessary redirects
+        clearInterval(timer);
       };
     }
   }, [orderNumber]);
@@ -35,16 +24,16 @@ const Payment = ({ showComplete }) => {
   const handleCounterPayment = () => {
     const newOrderNumber = Math.floor(100000 + Math.random() * 900000);
     setOrderNumber(newOrderNumber);
-  };
 
-  //const handleCounterPayment = async () => {
-  //  try {
-  //    const response = await axios.get(`${window.location.href}/orderNumber`); // Replace with your API URL
-  //    setOrderNumber(response.data.orderNumber); // Assuming the API returns { orderNumber: 123456 }
-  //  } catch (error) {
-  //    console.error("Error fetching order number:", error);
-  // }
-  //};
+    // Wait a frame to let DOM update before printing
+    requestAnimationFrame(() => {
+      window.print(); // Silent print will only work here
+    });
+
+    const redirectTimer = setTimeout(() => {
+      window.location.href = "/"; // Redirect when countdown reaches 0
+    }, 5000);
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 esamanru-light">
@@ -56,7 +45,7 @@ const Payment = ({ showComplete }) => {
               <p className="text-6xl esamanru-medium">Your Order</p>
               <p className="text-8xl esamanru-bold gap-5 flex items-center justify-center">
                 <span className="text-6xl esamanru-medium">No.</span>
-                {1}
+                {orderNumber}
               </p>
             </div>
             <p className="text-2xl esamanru-medium">
@@ -65,10 +54,10 @@ const Payment = ({ showComplete }) => {
           </>
         ) : (
           <>
-            <p className="text-7xl esamanru-bold p-10">
+            <p className="text-7xl esamanru-bold p-20">
               Where would you like to pay?
             </p>
-            <div className="h-1/4 w-full flex flex-row gap-15 justify-center items-center esamanru-medium text-xl">
+            <div className="h-1/4 px-20 w-full flex flex-row gap-15 justify-center items-center esamanru-medium text-xl">
               <button
                 disabled
                 className="h-full w-1/2 bg-gray-200 shadow-md border border-gray-300 text-gray-400 rounded-2xl flex flex-col justify-center items-center py-2 gap-5 opacity-50 cursor-not-allowed"
