@@ -5,7 +5,7 @@ import home_logo from "./img/home_background.jpg";
 import qr from "./img/frame.png";
 import outlined_full_logo from "./img/outlined_logo_full.png";
 import takeout from "./img/takeout.png";
-import dinein from "./img/dinein.png";
+import dinein from "./img/takeout_box.png";
 import button_bg from "./img/button_bg.png";
 
 function Home() {
@@ -39,7 +39,7 @@ function Home() {
         {/* Bottom Section */}
         <div className="h-3/10 w-full flex justify-center items-start gap-30">
           <button
-            className="h-7/10 w-1/3 bg-white/90 rounded-3xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
+            className="hidden h-7/10 w-1/3 bg-white/90 rounded-3xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
             onClick={(e) => handleClick("/takeout", e)}
           >
             <h1 className="text-5xl text-gray-800 mb-4 esamanru-bold">
@@ -48,13 +48,13 @@ function Home() {
             <img className="w-3/7" src={takeout} alt="" />
           </button>
           <button
-            className="h-7/10 w-1/3 bg-white/90 rounded-3xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
+            className="h-full w-full rounded-3xl flex flex-col items-center justify-center gap-5 relative overflow-hidden"
             onClick={(e) => handleClick("/dinein", e)}
           >
-            <h1 className="text-5xl text-gray-800 font-bold mb-4 esamanru-bold">
-              Dine-In
+            <h1 className="text-6xl text-white font-bold mb-4 esamanru-bold">
+              Tap to Start Order
             </h1>
-            <img className="w-3/7" src={dinein} alt="" />
+            <img className="w-6/7" src={dinein} alt="" />
           </button>
         </div>
         <div className="h-2/10 w-full p-5 flex justify-end items-end">
