@@ -5,8 +5,6 @@ import Dinein from "./Dinein";
 import TakeOut from "./TakeOut";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
       <BrowserRouter>
